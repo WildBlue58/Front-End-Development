@@ -1,0 +1,102 @@
+.sql-executor {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.sql-editor-section {
+  display: flex;
+  flex-direction: column;
+  background: #1e293b; /* Darker bg for editor */
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.sql-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.sql-header h3 {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sql-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.sql-editor {
+  width: 100%;
+  padding: 1.5rem;
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 200px;
+  box-sizing: border-box;
+}
+
+.sql-editor:focus {
+  outline: none;
+}
+
+/* History Section */
+.sql-history {
+  border-top: 1px solid var(--glass-border);
+  background: var(--bg-secondary);
+}
+
+.sql-history h4 {
+  color: var(--text-tertiary);
+  margin: 0;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.history-item {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  padding-left: 1.75rem;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
