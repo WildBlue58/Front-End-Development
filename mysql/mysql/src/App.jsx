@@ -9,7 +9,7 @@ import SQLExecutor from "./components/features/SQLExecutor";
 import QueryResult from "./components/features/QueryResult";
 import { ToastContainer } from "./components/common/Toast";
 import Icons from "./components/common/Icons";
-import "./App.css";
+// import "./App.css"; // Removed as we are using Tailwind
 import Header from "./components/layout/Header";
 import Sidebar from "./components/layout/Sidebar";
 
@@ -258,10 +258,10 @@ function App() {
   const renderContent = () => {
     if (viewMode === "structure") {
       return (
-        <div className="content-area">
+        <div className="flex-1 bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl flex flex-col overflow-hidden relative shadow-xl animate-fade-in">
           {loading && <Loading />}
           {error && (
-            <div className="error-message">
+            <div className="m-6 bg-red-500/15 border border-red-500/20 text-red-300 p-4 rounded-lg flex items-center">
               <p>❌ {error}</p>
             </div>
           )}
@@ -274,11 +274,11 @@ function App() {
 
     if (viewMode === "sql") {
       return (
-        <div className="content-area sql-view">
-          <div className="sql-section">
+        <div className="flex-1 bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl flex flex-col overflow-hidden relative shadow-xl animate-fade-in">
+          <div className="flex-none border-b border-white/10">
             <SQLExecutor onExecute={handleSQLExecute} loading={sqlLoading} />
           </div>
-          <div className="result-section">
+          <div className="flex-1 overflow-hidden flex flex-col bg-black/20">
             <QueryResult
               data={sqlResult}
               loading={sqlLoading}
@@ -291,10 +291,10 @@ function App() {
 
     // 数据视图
     return (
-      <div className="content-area">
-        <div className="table-info">
-          <div className="table-header">
-            <h3>
+      <div className="flex-1 bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl flex flex-col overflow-hidden relative shadow-xl animate-fade-in">
+        <div className="p-5 border-b border-white/10 bg-black/10">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="m-0 text-slate-100 flex items-center gap-3 text-xl font-semibold">
               {tableData?.tableType === "VIEW" ? (
                 <Icons.View size={20} />
               ) : (
@@ -302,21 +302,20 @@ function App() {
               )}
               {selectedTable}
               {tableData?.tableType === "VIEW" && (
-                <span className="view-badge">视图</span>
+                <span className="ml-2 px-2 py-0.5 rounded text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/20 uppercase tracking-wider">
+                  视图
+                </span>
               )}
             </h3>
             {tableData?.tableType !== "VIEW" && (
-              <button
-                className="btn btn-primary btn-with-icon"
-                onClick={handleCreate}
-              >
+              <button className="btn btn-primary" onClick={handleCreate}>
                 <Icons.Plus size={16} />
                 新增记录
               </button>
             )}
           </div>
           {tableData?.pagination && (
-            <p className="table-info-text">
+            <p className="m-0 text-slate-400 text-sm">
               共 {tableData.pagination.total} 条记录，当前显示{" "}
               {tableData.data.length} 条（第 {tableData.pagination.page} 页，共{" "}
               {tableData.pagination.totalPages} 页）
@@ -325,7 +324,7 @@ function App() {
         </div>
         {loading && !tableData && <Loading />}
         {error && (
-          <div className="error-message">
+          <div className="m-6 bg-red-500/15 border border-red-500/20 text-red-300 p-4 rounded-lg flex items-center">
             <p>❌ {error}</p>
           </div>
         )}
@@ -341,21 +340,23 @@ function App() {
           />
         )}
         {tableData && tableData.data && tableData.data.length === 0 && (
-          <div className="empty-message">表中没有数据</div>
+          <div className="text-center mt-20 text-slate-500 text-lg flex flex-col items-center gap-4">
+            表中没有数据
+          </div>
         )}
       </div>
     );
   };
 
   return (
-    <div className="app-container">
+    <div className="w-full h-screen flex flex-col overflow-hidden">
       <Header
         connectionStatus={connectionStatus}
         viewMode={viewMode}
         setViewMode={setViewMode}
       />
 
-      <div className="main-content">
+      <div className="flex flex-1 gap-6 p-6 max-w-[1800px] mx-auto w-full h-[calc(100vh-64px)] box-border">
         <Sidebar
           loadTables={loadTables}
           searchTerm={searchTerm}
