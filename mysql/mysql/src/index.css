@@ -1,103 +1,84 @@
-:root {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.92);
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
 
-  /* Modern Dark Theme Palette */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased min-h-screen overflow-x-hidden;
+    background-image: radial-gradient(
+        at 0% 0%,
+        rgba(14, 165, 233, 0.15) 0px,
+        transparent 50%
+      ),
+      radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+      radial-gradient(
+        at 100% 100%,
+        rgba(14, 165, 233, 0.15) 0px,
+        transparent 50%
+      ),
+      radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
 
-  /* Glassmorphism */
-  --glass-bg: rgba(30, 41, 59, 0.75);
-  --glass-bg-hover: rgba(51, 65, 85, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
 
-  /* Colors */
-  --accent-color: #38bdf8;
-  --accent-hover: #0ea5e9;
-  --accent-dim: rgba(56, 189, 248, 0.15);
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
 
-  --success-color: #4ade80;
-  --success-bg: rgba(74, 222, 128, 0.15);
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full border-2 border-transparent bg-clip-content;
+  }
 
-  --warning-color: #facc15;
-  --warning-bg: rgba(250, 204, 21, 0.15);
-
-  --danger-color: #f87171;
-  --danger-bg: rgba(248, 113, 113, 0.15);
-
-  /* Text */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
-
-  /* Spacing & Radius */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/20;
+  }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: var(--bg-primary);
-  background-image: radial-gradient(
-      at 0% 0%,
-      rgba(56, 189, 248, 0.15) 0px,
-      transparent 50%
-    ),
-    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-  background-attachment: fixed;
-  color: var(--text-primary);
-  overflow-x: hidden;
+@layer components {
+  .glass {
+    @apply bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-xl;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border;
+  }
+
+  .btn-primary {
+    @apply bg-sky-500 hover:bg-sky-400 text-white shadow-lg shadow-sky-500/20 border-transparent;
+  }
+
+  .btn-secondary {
+    @apply bg-white/5 hover:bg-white/10 text-slate-200 border-white/10;
+  }
+
+  .btn-danger {
+    @apply bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/20;
+  }
+
+  .input-base {
+    @apply w-full px-4 py-2 bg-black/20 border border-white/10 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/50 transition-all;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
 }
 
-#root {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  border: 2px solid transparent; /* Creates padding around thumb */
-  background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Global Transition */
-button,
-input,
-select,
-textarea,
-a {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
