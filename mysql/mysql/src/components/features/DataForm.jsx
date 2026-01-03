@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./DataForm.css";
 
 function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({});
@@ -65,7 +64,7 @@ function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
           type="text"
           value={value}
           readOnly
-          className="form-input form-input-readonly"
+          className="input-base bg-white/5 text-slate-500 cursor-not-allowed border-transparent"
           placeholder="自动生成"
         />
       );
@@ -81,7 +80,7 @@ function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
         <textarea
           value={value}
           onChange={(e) => handleChange(col.COLUMN_NAME, e.target.value)}
-          className="form-textarea"
+          className="input-base min-h-[100px] resize-y"
           required={isRequired}
           rows={4}
         />
@@ -92,7 +91,7 @@ function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
           type="date"
           value={value}
           onChange={(e) => handleChange(col.COLUMN_NAME, e.target.value)}
-          className="form-input"
+          className="input-base"
           required={isRequired}
         />
       );
@@ -102,7 +101,7 @@ function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
           type="datetime-local"
           value={value}
           onChange={(e) => handleChange(col.COLUMN_NAME, e.target.value)}
-          className="form-input"
+          className="input-base"
           required={isRequired}
         />
       );
@@ -114,7 +113,7 @@ function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
         <select
           value={value}
           onChange={(e) => handleChange(col.COLUMN_NAME, e.target.value)}
-          className="form-select"
+          className="input-base"
           required={isRequired}
         >
           <option value="">请选择</option>
@@ -128,7 +127,7 @@ function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
           type="text"
           value={value}
           onChange={(e) => handleChange(col.COLUMN_NAME, e.target.value)}
-          className="form-input"
+          className="input-base"
           required={isRequired}
           placeholder={isRequired ? "必填" : "可选"}
         />
@@ -137,31 +136,38 @@ function DataForm({ tableName, columns, initialData, onSubmit, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="data-form">
-      <div className="form-fields">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-5 max-h-[60vh] overflow-y-auto pr-2 pb-2">
         {columns.map((col) => {
           if (col.EXTRA.includes("auto_increment") && !initialData) {
             return null; // 新增时不显示自增字段
           }
           return (
-            <div key={col.COLUMN_NAME} className="form-field">
-              <label className="form-label">
+            <div key={col.COLUMN_NAME} className="flex flex-col gap-2">
+              <label className="text-slate-400 text-sm font-medium flex items-baseline gap-2">
                 {col.COLUMN_NAME}
                 {col.IS_NULLABLE === "NO" &&
                   !col.EXTRA.includes("auto_increment") && (
-                    <span className="required">*</span>
+                    <span className="text-red-500 font-bold">*</span>
                   )}
-                <span className="form-type">({col.DATA_TYPE})</span>
+                <span className="text-slate-500 text-xs font-normal bg-white/5 px-1.5 py-px rounded">
+                  ({col.DATA_TYPE})
+                </span>
               </label>
               {renderInput(col)}
               {errors[col.COLUMN_NAME] && (
-                <span className="form-error">{errors[col.COLUMN_NAME]}</span>
+                <span className="text-red-400 text-xs flex items-center gap-1 mt-1 font-medium">
+                  <span className="inline-block w-3.5 h-3.5 leading-[14px] text-center rounded-full bg-red-400 text-white text-[10px] font-bold">
+                    !
+                  </span>
+                  {errors[col.COLUMN_NAME]}
+                </span>
               )}
             </div>
           );
         })}
       </div>
-      <div className="form-actions">
+      <div className="flex justify-end gap-4 pt-6 border-t border-white/10">
         <button type="button" onClick={onCancel} className="btn btn-secondary">
           取消
         </button>

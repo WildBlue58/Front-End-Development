@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./SQLExecutor.css";
 
 function SQLExecutor({ onExecute, loading }) {
   const [sql, setSql] = useState("");
@@ -27,11 +26,13 @@ function SQLExecutor({ onExecute, loading }) {
   };
 
   return (
-    <div className="sql-executor">
-      <div className="sql-editor-section">
-        <div className="sql-header">
-          <h3>SQL 查询编辑器</h3>
-          <div className="sql-actions">
+    <div className="flex flex-col gap-0 p-0 h-full">
+      <div className="flex flex-col bg-slate-800/50 border-b border-white/10">
+        <div className="flex justify-between items-center px-6 py-3 bg-black/10 border-b border-white/10">
+          <h3 className="text-slate-400 m-0 text-sm font-medium uppercase tracking-wider">
+            SQL 查询编辑器
+          </h3>
+          <div className="flex gap-3">
             <button
               className="btn btn-primary"
               onClick={handleExecute}
@@ -39,16 +40,13 @@ function SQLExecutor({ onExecute, loading }) {
             >
               执行 (Ctrl+Enter)
             </button>
-            <button
-              className="btn btn-secondary"
-              onClick={() => setSql("")}
-            >
+            <button className="btn btn-secondary" onClick={() => setSql("")}>
               清空
             </button>
           </div>
         </div>
         <textarea
-          className="sql-editor"
+          className="w-full p-6 bg-transparent border-none text-slate-200 font-mono text-sm leading-relaxed resize-y min-h-[200px] focus:outline-none placeholder-slate-600"
           value={sql}
           onChange={(e) => setSql(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -57,13 +55,15 @@ function SQLExecutor({ onExecute, loading }) {
         />
       </div>
       {history.length > 0 && (
-        <div className="sql-history">
-          <h4>查询历史</h4>
-          <div className="history-list">
+        <div className="border-t border-white/10 bg-slate-900/30">
+          <h4 className="text-slate-500 m-0 px-6 py-3 text-xs uppercase tracking-wider bg-black/20 border-b border-white/10">
+            查询历史
+          </h4>
+          <div className="flex flex-col max-h-[150px] overflow-y-auto">
             {history.map((query, index) => (
               <div
                 key={index}
-                className="history-item"
+                className="px-6 py-3 border-b border-white/10 text-slate-400 text-sm cursor-pointer hover:bg-white/5 hover:text-slate-100 transition-all font-mono truncate"
                 onClick={() => handleHistoryClick(query)}
                 title={query}
               >
@@ -78,4 +78,3 @@ function SQLExecutor({ onExecute, loading }) {
 }
 
 export default SQLExecutor;
-
