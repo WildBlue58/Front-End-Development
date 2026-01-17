@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 项目概述
 
 这是一个多技术栈学习项目仓库，包含以下主要模块：
+
 - **mysql/mysql/** - MySQL 数据库管理工具（React + Node.js 全栈应用）
 - **zijie/** - JavaScript 前端算法学习（调度器、LRU缓存、防抖节流）
 - **python/** - Python AI 学习模块（AI转SQL、Jupyter Notebook）
@@ -20,6 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### MySQL 管理工具 (mysql/mysql/)
 
 **前端开发：**
+
 ```bash
 cd mysql/mysql
 pnpm install          # 安装依赖
@@ -30,6 +32,7 @@ pnpm lint             # 代码检查
 ```
 
 **后端开发：**
+
 ```bash
 cd mysql/mysql/server
 npm install           # 安装依赖
@@ -59,11 +62,13 @@ node zijie/防抖节流/debounce.js
 ### MySQL 管理工具架构
 
 **前后端分离架构：**
+
 - 前端：React 19 + Vite 6 + Tailwind CSS 3
 - 后端：Express 4 + MySQL2（连接池）
 - API 代理：Vite dev server proxy `/api` → `http://localhost:3001`
 
 **前端组件结构：**
+
 ```
 src/
 ├── services/api.js           # Axios 实例和所有 API 定义
@@ -75,6 +80,7 @@ src/
 ```
 
 **后端结构：**
+
 ```
 server/
 ├── index.js                  # Express 入口
@@ -85,6 +91,7 @@ server/
 ```
 
 **核心 API 端点：**
+
 - `GET /api/test` - 测试连接
 - `GET /api/tables` - 获取表列表
 - `GET /api/data/:tableName` - 获取表数据（分页）
@@ -97,16 +104,19 @@ server/
 ### 技术栈特性
 
 **Tailwind CSS 配置：**
+
 - 主题色：`slate-900` (暗黑背景) + `sky-500` (强调色)
 - 自定义工具类：`glass`, `btn`, `input-base`
 - 玻璃拟态风格：`backdrop-blur` + 半透明背景
 
 **MySQL2 连接池：**
+
 - 默认连接池大小：10
 - 自动管理连接生命周期
 - 使用 `promise()` 包装异步查询
 
 **安全特性：**
+
 - SQL 注入防护（`utils/validation.js`）
 - CORS 配置
 - 请求头 `Content-Type: application/json`
@@ -114,16 +124,19 @@ server/
 ### JavaScript 学习模块
 
 **zijie/Scheduler/** - 任务调度器实现
+
 - 控制并发任务数量
 - 队列管理机制
 - 多版本迭代（1-1.js 至 1-6.js）
 
 **zijie/防抖节流/** - 性能优化函数
+
 - 防抖（debounce.js）：延迟执行、立即执行版本
 - 节流（throttle.js）：时间戳版本、定时器版本
 - 包含详细中文注释和应用场景说明
 
 **zijie/3.js** - LRU 缓存实现
+
 - 使用 Map 保持顺序
 - O(1) 时间复杂度
 
