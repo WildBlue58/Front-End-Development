@@ -1,4 +1,5 @@
 {
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Bash(claude mcp add:*)",
@@ -6,9 +7,12 @@
       "mcp__glm-camp__claim_glm_camp_coupon",
       "mcp__milk-tea__claim_milk_tea_coupon",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 添加Claude Code项目配置和文档,新增CLAUDE.md包含项目架构说明、常用命令及技术栈特性,配置settings.local.json设置响应语言为中文\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: 添加Claude Code项目配置和文档,新增CLAUDE.md包含项目架构说明、常用命令及技术栈特性,配置settings.local.json设置响应语言为中文\nEOF\n\\)\")",
+      "Bash(ls:*)",
+      "mcp__acp__Bash"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "language": "Chinese"
 }
