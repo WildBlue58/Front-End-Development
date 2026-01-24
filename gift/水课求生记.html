@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>专注时钟</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&display=swap');
+
+        :root {
+            --primary: #4F46E5;
+            --secondary: #818CF8;
+            --cta: #F97316;
+            --bg: #EEF2FF;
+            --text: #1E1B4B;
+            --danger: #EF4444;
+            --trap: #4B5563;
+            --neon-glow: 0 0 10px rgba(79, 70, 229, 0.6), 0 0 20px rgba(79, 70, 229, 0.4);
+            --crt-line: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            overflow: hidden;
+            font-family: 'Baloo 2', cursive, sans-serif;
+            color: var(--text);
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* CRT Scanline Overlay */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.1) 50%
+            ), linear-gradient(
+                90deg, 
+                rgba(255, 0, 0, 0.03), 
+                rgba(0, 255, 0, 0.01), 
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 4px, 6px 100%;
+            z-index: 999;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        /* Start Screen - Retro Arcade Style */
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            background: radial-gradient(circle at center, #fff 0%, #e0e7ff 100%);
+            transition: all 0.5s ease-out;
+            padding: 20px;
+            overflow-y: auto; /* Allow scrolling on small screens */
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 0 4px var(--text), 10px 10px 0 var(--secondary);
+            text-align: center;
+            max-width: 100%;
+            width: 420px;
+            transform: translateY(0);
+            border: 4px solid var(--text);
+            position: relative;
+            margin: auto; /* Center vertically in flex container with scroll */
+        }
+
+        .emoji-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+            display: inline-block;
+            filter: drop-shadow(4px 4px 0 var(--secondary));
+            animation: bounce 2s infinite;
+            color: var(--primary);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 var(--secondary);
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: var(--primary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: #F3F4F6;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 3px solid var(--text);
+            box-shadow: inset 4px 4px 0 rgba(0,0,0,0.05);
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 800;
+            color: var(--text);
+            font-size: 18px;
+        }
+
+        .multiplier-tag {
+            background: var(--cta);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            border: 2px solid var(--text);
+            box-shadow: 2px 2px 0 var(--text);
+        }
+
+        /* Retro Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 12px;
+            cursor: pointer;
+            background: var(--text);
+            border-radius: 6px;
+            border: 2px solid var(--text);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            height: 24px;
+            width: 24px;
+            background: var(--primary);
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -8px;
+            border: 3px solid var(--text);
+            border-radius: 4px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: var(--secondary);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--primary);
+            margin-top: 12px;
+            font-weight: 600;
+        }
+
+        /* Retro Start Button */
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--primary);
+            color: white;
+            border: 4px solid var(--text);
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 6px 6px 0 var(--text);
+            transition: all 0.1s;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Baloo 2', cursive;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 var(--text);
+            background: var(--secondary);
+        }
+
+        .start-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0 0 0 var(--text);
+        }
+
+        .hint-text {
+            margin-top: 24px;
+            color: #6B7280;
+            font-size: 15px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .hint-highlight {
+            color: var(--cta);
+            font-weight: 800;
+            font-size: 18px;
+            text-shadow: 1px 1px 0 var(--text);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Game Over Screen */
+        #gameOverScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            color: white;
+            text-align: center;
+        }
+
+        .game-over-title {
+            font-size: 60px;
+            color: var(--danger);
+            text-shadow: 4px 4px 0 #000;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        .game-over-reason {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 40px;
+            max-width: 80%;
+        }
+
+        .retry-btn {
+            padding: 15px 50px;
+            font-size: 24px;
+            background: var(--cta);
+            color: white;
+            border: 4px solid #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Baloo 2', cursive;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .retry-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Level Up Toast */
+        #levelUpToast {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(79, 70, 229, 0.9);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 16px;
+            border: 4px solid #fff;
+            font-size: 32px;
+            font-weight: 800;
+            z-index: 150;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+/* 确保 endGameButtons 容器样式存在 */
+        #endGameButtons {
+            position: fixed;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none; /* 初始隐藏 */
+            flex-direction: column;
+            gap: 15px;
+            z-index: 200;
+        }
+
+        /* Mobile Optimization: Fit to screen without scrolling */
+        @media (max-height: 800px) {
+            .card {
+                padding: 15px 20px !important;
+                width: 95% !important;
+                max-width: 380px !important;
+            }
+            .emoji-icon {
+                width: 40px !important;
+                height: 40px !important;
+                margin-bottom: 5px !important;
+            }
+            h1 {
+                font-size: 24px !important;
+                margin-bottom: 2px !important;
+            }
+            .subtitle {
+                font-size: 12px !important;
+                margin-bottom: 10px !important;
+            }
+            .control-panel {
+                padding: 10px !important;
+                margin-bottom: 15px !important;
+            }
+            .control-label {
+                font-size: 14px !important;
+                margin-bottom: 5px !important;
+            }
+            input[type=range] {
+                height: 8px !important;
+            }
+            input[type=range]::-webkit-slider-thumb {
+                height: 18px !important;
+                width: 18px !important;
+                margin-top: -6px !important;
+            }
+            .range-labels {
+                margin-top: 5px !important;
+                font-size: 10px !important;
+            }
+            .start-btn {
+                padding: 10px !important;
+                font-size: 20px !important;
+            }
+            .hint-text {
+                margin-top: 10px !important;
+                font-size: 12px !important;
+                line-height: 1.3 !important;
+            }
+            /* Adjust spacing for difficulty section */
+            #difficultyPanel input {
+                padding: 2px !important;
+                font-size: 12px !important;
+            }
+        }
+        /* Screen Shake Animation */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .shake-effect {
+            animation: shake 0.5s;
+            animation-iteration-count: 1;
+        }
+
+        /* Stage Banner */
+        #stageBanner {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 30px 0;
+            z-index: 180;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(5px);
+        }
+
+        #stageBanner h2 {
+            font-size: 48px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            text-shadow: 4px 4px 0 var(--text);
+            font-family: 'Baloo 2', cursive;
+        }
+
+        #stageBanner p {
+            font-size: 24px;
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body id="gameBody">
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="crt-overlay"></div>
+    <div id="startScreen">
+        <div class="card">
+            <svg class="emoji-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <h1>水课求生记</h1>
+            <p class="subtitle">周文沛定制版 · 45分钟挑战</p>
+            
+            <div style="margin-bottom: 20px; font-weight: 800; color: var(--cta);">
+                👑 历史最高分: <span id="highScoreDisplay">0</span>
+            </div>
+
+            <div class="control-panel">
+                <div class="control-label">
+                    <span>时间流逝倍率</span>
+                    <span class="multiplier-tag"><span id="timeScaleDisplay">1</span>x</span>
+                </div>
+                <input type="range" id="timeScaleInput" min="1" max="100" value="1" step="1">
+                <div class="range-labels">
+                    <span>真实时间 (1x)</span>
+                    <span>光速逃逸 (100x)</span>
+                </div>
+                
+                <p style="font-size: 12px; color: #6B7280; margin-top: 8px; text-align: left; background: rgba(255,255,255,0.5); padding: 5px; border-radius: 5px;">
+                    ℹ️ <strong>倍率说明</strong>：<br>
+                    • <strong>1x</strong>: 体验真实的45分钟煎熬课程。<br>
+                    • <strong>60x</strong>: 1秒钟=游戏内1分钟，45秒即可通关。<br>
+                    • 调得越快，游戏节奏越快，考验手速！
+                </p>
+
+                <!-- 难度设置折叠区域 -->
+                <div style="margin-top: 20px; border-top: 2px dashed var(--text); padding-top: 15px;">
+                    <div class="control-label" style="font-size: 16px; cursor: pointer;" onclick="toggleDifficultyPanel()">
+                        <span>⚙️ 关卡目标分数设置 (点击展开)</span>
+                        <span>▼</span>
+                    </div>
+                    <div id="difficultyPanel" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <!-- JS将会填充这里 -->
+                    </div>
+                </div>
+            </div>
+
+            <button class="start-btn" id="startBtn">开始上课</button>
+            
+            <p class="hint-text">
+                玩法提示：寻找幸运数字 <span class="hint-highlight">6</span> 和 <span class="hint-highlight">5</span><br>
+                每关需达到目标分数，否则将被淘汰！
+            </p>
+        </div>
+    </div>
+
+    <div id="gameOverScreen">
+        <h1 class="game-over-title">GAME OVER</h1>
+        <p class="game-over-reason" id="gameOverReason">你睡着了...</p>
+        <button class="retry-btn" onclick="returnToMenu()">返回主菜单</button>
+    </div>
+    
+    <div id="endGameButtons">
+        <button class="retry-btn" onclick="returnToMenu()">返回主菜单</button>
+    </div>
+
+    <div id="levelUpToast">LEVEL UP!</div>
+    
+    <div id="stageBanner">
+        <h2 id="stageBannerTitle">LEVEL 1</h2>
+        <p id="stageBannerDesc">潜伏期</p>
+    </div>
+
+<script>
+/**
+ * ==========================================
+ * 配置区域 (Configuration)
+ * ==========================================
+ */
+// 时间流逝倍率 (由用户设置)
+let TIME_SCALE = 1; 
+
+const TOTAL_MINUTES = 45;
+
+const COLORS = {
+    bg: '#f0f9ff',
+    bgPink: '#fff0f5', // 神游阶段背景
+    bgDark: '#e6f7ff',
+    primary: '#333333',
+    lucky: '#FFB6C1', // 生日粉 (LightPink)
+    luckyBorder: '#FFD700', // 金色
+    bubbleDefault: '#e1f5fe',
+    text: '#2c3e50',
+    danger: '#ff4d4f'
+};
+
+// 游戏阶段定义 (添加目标分数 minScore)
+const STAGES = {
+    0: { name: 'IDLE', start: 0, end: 8, title: 'Level 1: 潜伏期', desc: '假装听课 (目标: 100分)', minScore: 100 },
+    1: { name: 'BLUR', start: 8, end: 16, title: 'Level 2: 困倦期', desc: '别睡着！(目标: 300分)', minScore: 300 },
+    2: { name: 'DREAM', start: 16, end: 24, title: 'Level 3: 神游期', desc: '福利时间 (目标: 600分)', minScore: 600 },
+    3: { name: 'PANIC', start: 24, end: 33, title: 'Level 4: 提问期', desc: '红灯停！(目标: 1000分)', minScore: 1000 },
+    4: { name: 'MATH', start: 33, end: 44, title: 'Level 5: 煎熬期', desc: '凑11点 (目标: 1500分)', minScore: 1500 },
+    5: { name: 'FREEDOM', start: 44, end: 100, title: 'Level 6: 下课！', desc: '自由啦！！！', minScore: 0 }
+};
+
+// 弹幕文案
+const BARRAGE_TEXTS = [
+    "老师这PPT好像有50页...", 
+    "空调是不是有点冷...", 
+    "中午吃麻辣烫还是盖饭...", 
+    "这知识它不进脑子啊...",
+    "文沛，坚持住...",
+    "再撑一下...",
+    "我是谁？我在哪？",
+    "想喝奶茶..."
+];
+
+/**
+ * ==========================================
+ * 游戏核心逻辑 (Game Logic)
+ * ==========================================
+ */
+let canvas, ctx;
+let width, height;
+let gameStartTime;
+let lastFrameTime;
+let currentStageIndex = 0;
+let lastStageIndex = 0; // 记录上一帧的阶段，用于检测切换
+let bubbles = [];
+let particles = [];
+let floatingTexts = [];
+let score = 0;
+let combo = 0; // 当前连击数
+let maxCombo = 0; // 最大连击记录
+let highScore = parseInt(localStorage.getItem('sk_highScore') || 0); // 读取最高分
+let luckyClickCount = 0; // 记录点了多少次6和5
+
+// 音效上下文
+let audioCtx;
+
+// 状态变量
+let blurLevel = 0;
+let panicEyeState = 'CLOSED'; // OPEN or CLOSED
+let panicTimer = 0;
+let panicStrikeCount = 0; // 记录被发现次数
+let mathTarget = 11;
+let mathCurrent = 0;
+let currentBarrage = null;
+let isGameOver = false;
+let animationId = null; // 动画帧ID
+
+window.onload = () => {
+    canvas = document.getElementById('gameCanvas');
+    ctx = canvas.getContext('2d');
+    resize();
+    window.addEventListener('resize', resize);
+    
+    // 绑定交互事件 (只绑定一次)
+    canvas.addEventListener('mousedown', handleInput);
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // 防止滚动
+        handleInput(e.touches[0]);
+    }, {passive: false});
+
+    // 配置滑块逻辑
+    const scaleInput = document.getElementById('timeScaleInput');
+    const scaleDisplay = document.getElementById('timeScaleDisplay');
+    
+    scaleInput.addEventListener('input', (e) => {
+        TIME_SCALE = parseInt(e.target.value);
+        scaleDisplay.textContent = TIME_SCALE;
+    });
+    
+    // 显示历史最高分
+    document.getElementById('highScoreDisplay').textContent = highScore;
+    
+    // 初始化难度设置面板
+    const difficultyPanel = document.getElementById('difficultyPanel');
+    for (let i = 0; i < 5; i++) {
+        const stage = STAGES[i];
+        const div = document.createElement('div');
+        div.style.textAlign = 'left';
+        div.innerHTML = `
+            <label style="font-size: 12px; color: #666; display: block;">${stage.title.split(':')[0]}</label>
+            <input type="number" id="scoreTarget${i}" value="${stage.minScore}" 
+                style="width: 100%; padding: 5px; border: 2px solid var(--text); border-radius: 5px; font-family: 'Baloo 2';">
+        `;
+        difficultyPanel.appendChild(div);
+    }
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+        // 初始化音效
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // 应用用户设置的目标分数
+        for (let i = 0; i < 5; i++) {
+            const input = document.getElementById(`scoreTarget${i}`);
+            const val = parseInt(input.value);
+            if (!isNaN(val) && val >= 0) {
+                STAGES[i].minScore = val;
+                // 更新描述文案
+                STAGES[i].desc = STAGES[i].desc.replace(/目标: \d+分/, `目标: ${val}分`);
+            }
+        }
+
+        const screen = document.getElementById('startScreen');
+        screen.style.opacity = 0;
+        setTimeout(() => {
+            screen.style.display = 'none';
+            startGame();
+        }, 500);
+    });
+};
+
+function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+}
+
+function startGame() {
+    // 重置游戏状态
+    score = 0;
+    combo = 0;
+    maxCombo = 0;
+    luckyClickCount = 0;
+    blurLevel = 0;
+    panicEyeState = 'CLOSED';
+    panicTimer = 0;
+    panicStrikeCount = 0;
+    mathCurrent = 0;
+    currentBarrage = null;
+    isGameOver = false;
+    currentStageIndex = 0;
+    lastStageIndex = 0;
+    
+    // 清空实体
+    bubbles = [];
+    particles = [];
+    floatingTexts = [];
+
+    gameStartTime = Date.now();
+    lastFrameTime = Date.now();
+    
+    if (animationId) cancelAnimationFrame(animationId);
+    loop();
+}
+
+function returnToMenu() {
+    // 隐藏游戏结束界面
+    document.getElementById('gameOverScreen').style.display = 'none';
+    document.getElementById('endGameButtons').style.display = 'none';
+    
+    // 显示开始界面
+    const screen = document.getElementById('startScreen');
+    screen.style.display = 'flex';
+    // 强制重绘以触发过渡
+    void screen.offsetWidth; 
+    screen.style.opacity = 1;
+    
+    // 停止游戏循环
+    isGameOver = true;
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+    
+    // 清除画布
+    ctx.clearRect(0, 0, width, height);
+}
+
+function toggleDifficultyPanel() {
+    const panel = document.getElementById('difficultyPanel');
+    const isHidden = panel.style.display === 'none';
+    
+    // Toggle display
+    panel.style.display = isHidden ? 'grid' : 'none';
+    
+    // Force repaint to fix mobile rendering glitches
+    if (isHidden) {
+        // Trigger reflow
+        void panel.offsetWidth;
+        
+        // Ensure inputs are visible and interactive
+        const inputs = panel.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.style.transform = 'translateZ(0)'; // Hardware acceleration hint
+        });
+        
+        // Scroll to make sure it's visible if off-screen
+        setTimeout(() => {
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
+}
+
+function loop() {
+    const now = Date.now();
+    const deltaTime = (now - lastFrameTime) / 1000;
+    lastFrameTime = now;
+
+    // 计算游戏内时间
+    const realElapsedSec = (now - gameStartTime) / 1000;
+    const gameMinutes = (realElapsedSec * TIME_SCALE) / 60;
+
+    // 更新阶段
+    if (!isGameOver) {
+        lastStageIndex = currentStageIndex;
+        updateStage(gameMinutes);
+        
+        // 检测阶段切换 (Level Progression Check)
+        if (currentStageIndex > lastStageIndex) {
+            checkLevelPass(lastStageIndex);
+            // Show Stage Banner for new stage
+            if (!isGameOver) {
+                showStageBanner(currentStageIndex);
+            }
+        } else if (currentStageIndex === 0 && lastStageIndex === 0 && realElapsedSec < 1) {
+             // 游戏刚开始显示一次
+             showStageBanner(0);
+        }
+    }
+
+    // 绘制背景
+    drawBackground(gameMinutes);
+
+    // 阶段逻辑处理
+    if (!isGameOver) {
+        handleStageLogic(gameMinutes, deltaTime);
+    }
+
+    // 更新实体
+    updateEntities(deltaTime);
+    
+    // 绘制实体
+    drawEntities();
+
+    // 绘制UI
+    drawUI(gameMinutes);
+
+    animationId = requestAnimationFrame(loop);
+}
+
+function updateStage(minutes) {
+    for (let key in STAGES) {
+        if (minutes >= STAGES[key].start && minutes < STAGES[key].end) {
+            currentStageIndex = parseInt(key);
+            break;
+        }
+    }
+}
+
+function drawBackground(gameMinutes) {
+    // 基础背景色
+    if (currentStageIndex === 2) {
+        ctx.fillStyle = COLORS.bgPink; // 神游期粉色
+    } else if (currentStageIndex === 5) {
+        ctx.fillStyle = '#fff'; // 下课后亮白
+    } else {
+        ctx.fillStyle = COLORS.bg;
+    }
+    ctx.fillRect(0, 0, width, height);
+
+    // 阶段1：困倦模糊蒙层
+    if (currentStageIndex === 1 && blurLevel > 0) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(blurLevel * 0.2, 0.95)})`;
+        ctx.fillRect(0, 0, width, height);
+        
+        // 困倦提示
+        if (blurLevel > 3.5) {
+            ctx.font = "bold 30px 'Baloo 2'";
+            ctx.fillStyle = COLORS.danger;
+            ctx.textAlign = 'center';
+            ctx.fillText("快醒醒！要睡着了！", width/2, height/2);
+        }
+    }
+
+    // 中心大时钟 (除了神游期和下课期)
+    if (currentStageIndex !== 2 && currentStageIndex !== 5) {
+        drawClock(gameMinutes);
+    }
+}
+
+function drawClock(gameMinutes) {
+    const cx = width / 2;
+    const cy = height / 3;
+    
+    ctx.textAlign = 'center';
+    
+    // 倒计时分钟数
+    let remainMin = Math.floor(TOTAL_MINUTES - gameMinutes);
+    if (remainMin < 0) remainMin = 0;
+    
+    ctx.font = 'bold 80px -apple-system, BlinkMacSystemFont';
+    ctx.fillStyle = 'rgba(0,0,0,0.05)';
+    ctx.fillText(`${remainMin}'`, cx, cy);
+    
+    // 阶段提示文字
+    ctx.font = '16px sans-serif';
+    ctx.fillStyle = '#999';
+    ctx.fillText(STAGES[currentStageIndex].title, cx, cy + 50);
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText(STAGES[currentStageIndex].desc, cx, cy + 75);
+}
+
+function handleStageLogic(minutes, dt) {
+    const stage = currentStageIndex;
+
+    // Stage 0: 弹幕 + 少量泡泡
+    if (stage === 0) {
+        if (!currentBarrage && Math.random() < 0.01) {
+            currentBarrage = {
+                text: BARRAGE_TEXTS[Math.floor(Math.random() * BARRAGE_TEXTS.length)],
+                x: width,
+                y: height - 100 - Math.random() * 100
+            };
+        }
+        if (currentBarrage) {
+            ctx.font = "18px sans-serif";
+            ctx.fillStyle = "rgba(0,0,0,0.4)";
+            ctx.fillText(currentBarrage.text, currentBarrage.x, currentBarrage.y);
+            currentBarrage.x -= 80 * dt;
+            if (currentBarrage.x < -300) currentBarrage = null;
+        }
+        // 新增：潜伏期也要偶尔出泡泡，否则无法得分
+        if (Math.random() < 0.02) spawnBubble(false);
+    }
+
+    // Stage 1: 困倦
+    if (stage === 1) {
+        // 视野逐渐变糊
+        blurLevel = Math.min(blurLevel + dt * 0.3, 5.0);
+        if (blurLevel >= 5.0) {
+            gameOver("你睡着了...老师很生气");
+            return;
+        }
+        // 动态难度：生成率随连击数略微提升
+        let spawnRate = 0.04 + (combo * 0.001);
+        if (Math.random() < spawnRate) spawnBubble(false);
+    } else {
+        // 离开此阶段迅速恢复
+        if (blurLevel > 0) blurLevel -= dt * 2;
+        if (blurLevel < 0) blurLevel = 0;
+    }
+
+    // Stage 2: 神游 (福利)
+    if (stage === 2) {
+        if (Math.random() < 0.15) spawnBubble(true);
+    }
+
+    // Stage 3: 提问 (红绿灯)
+    if (stage === 3) {
+        panicTimer += dt;
+        let cycle = 5; // 5秒一个周期
+        let t = panicTimer % cycle;
+        
+        // 显示剩余机会
+        ctx.textAlign = 'left';
+        ctx.font = "bold 20px 'Baloo 2'";
+        ctx.fillStyle = COLORS.danger;
+        ctx.fillText(`警告次数: ${panicStrikeCount}/3`, 20, 80);
+
+        // 前3.5秒安全，后1.5秒危险
+        if (t > 3.5) {
+            panicEyeState = 'OPEN';
+            // 危险红光背景
+            ctx.fillStyle = `rgba(255, 0, 0, 0.15)`;
+            ctx.fillRect(0, 0, width, height);
+            
+            drawEye(true);
+        } else {
+            panicEyeState = 'CLOSED';
+            drawEye(false);
+            if (Math.random() < 0.06) spawnBubble(false); // 稍微提高生成率，诱惑玩家
+        }
+    }
+
+    // Stage 4: 煎熬 (算术)
+    if (stage === 4) {
+        ctx.textAlign = 'center';
+        ctx.fillStyle = "#333";
+        ctx.font = "bold 24px sans-serif";
+        ctx.fillText(`当前点数: ${mathCurrent} / ${mathTarget}`, width/2, height/2 + 50);
+        
+        if (mathCurrent === mathTarget) {
+            createFloatingText(width/2, height/2, "✨ 完美！ ✨", "#FFD700");
+            mathCurrent = 0; // 重置
+            score += 50;
+        }
+        
+        if (Math.random() < 0.05) spawnBubble(false);
+    }
+
+    // Stage 5: 下课
+    if (stage === 5) {
+        if (Math.random() < 0.1) {
+            createExplosion(
+                Math.random() * width, 
+                Math.random() * height * 0.6, 
+                ['#FF5733', '#33FF57', '#3357FF', '#F333FF'][Math.floor(Math.random()*4)]
+            );
+        }
+        drawEndScreen();
+    }
+}
+
+function showStageBanner(index) {
+    const banner = document.getElementById('stageBanner');
+    const title = document.getElementById('stageBannerTitle');
+    const desc = document.getElementById('stageBannerDesc');
+    
+    title.textContent = STAGES[index].title.split(':')[0]; // "Level X"
+    desc.textContent = STAGES[index].desc;
+    
+    banner.style.transform = 'translate(-50%, -50%) scale(1)';
+    setTimeout(() => {
+        banner.style.transform = 'translate(-50%, -50%) scale(0)';
+    }, 2500);
+    
+    // 游戏开始时使用柔和的 start 音效，其他关卡使用 lucky
+    if (index === 0) {
+        playSound('start');
+    } else {
+        playSound('lucky');
+    }
+}
+
+function triggerShake() {
+    const body = document.getElementById('gameBody');
+    body.classList.remove('shake-effect');
+    void body.offsetWidth; // trigger reflow
+    body.classList.add('shake-effect');
+}
+
+// 绘制“老师的眼镜”
+function drawEye(isOpen) {
+    const cx = width / 2;
+    const cy = 100;
+    
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#333';
+    
+    // 镜框
+    ctx.beginPath();
+    ctx.arc(cx - 30, cy, 20, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx + 30, cy, 20, 0, Math.PI * 2);
+    ctx.stroke();
+    // 鼻梁
+    ctx.beginPath();
+    ctx.moveTo(cx - 10, cy);
+    ctx.lineTo(cx + 10, cy);
+    ctx.stroke();
+    
+    if (isOpen) {
+        // 瞳孔
+        ctx.fillStyle = '#FF0000';
+        ctx.beginPath();
+        ctx.arc(cx - 30, cy, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(cx + 30, cy, 8, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.font = "bold 20px sans-serif";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText("别动！", cx, cy + 50);
+    } else {
+        // 闭眼线
+        ctx.beginPath();
+        ctx.moveTo(cx - 40, cy);
+        ctx.lineTo(cx - 20, cy);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(cx + 20, cy);
+        ctx.lineTo(cx + 40, cy);
+        ctx.stroke();
+    }
+}
+
+function drawEndScreen() {
+    // 保存最高分
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('sk_highScore', highScore);
+    }
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+    ctx.fillRect(0, 0, width, height);
+    
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#333';
+    
+    let y = height / 3;
+    ctx.font = "bold 40px 'Baloo 2'";
+    ctx.fillText("🎉 终于下课了！ 🎉", width/2, y);
+    
+    ctx.font = "20px 'Baloo 2'";
+    ctx.fillStyle = "#666";
+    y += 50;
+    ctx.fillText("该死的水课终于结束了🤩", width/2, y);
+    
+    y += 40;
+    ctx.font = "bold 24px 'Baloo 2'";
+    ctx.fillStyle = "#333";
+    ctx.fillText(`最终得分: ${score}`, width/2, y);
+
+    if (score === highScore) {
+        y += 30;
+        ctx.font = "bold 18px 'Baloo 2'";
+        ctx.fillStyle = COLORS.cta;
+        ctx.fillText("👑 新纪录！", width/2, y);
+    }
+
+    y += 40;
+    ctx.font = "18px 'Baloo 2'";
+    ctx.fillStyle = "#FF69B4";
+    ctx.fillText(`幸运数字 6 和 5 共出现了 ${luckyClickCount} 次`, width/2, y);
+    
+    y += 30;
+    ctx.font = "14px 'Baloo 2'";
+    ctx.fillStyle = "#999";
+    ctx.fillText("看来这两个数字和你很有缘~", width/2, y);
+
+    // 显示重玩按钮
+    document.getElementById('endGameButtons').style.display = 'flex';
+}
+
+/**
+ * ==========================================
+ * 实体管理 (Entities)
+ * ==========================================
+ */
+
+class Bubble {
+    constructor(isDreamMode) {
+        this.r = 30 + Math.random() * 15;
+        this.x = Math.random() * (width - 2 * this.r) + this.r;
+        
+        // 动态难度：速度随关卡提升
+        let baseSpeed = 80 + (currentStageIndex * 20); // 每关快20
+        
+        if (isDreamMode) {
+            this.y = -50;
+            this.vy = baseSpeed + 20 + Math.random() * 100;
+        } else {
+            this.y = height + 50;
+            this.vy = -(baseSpeed + Math.random() * 80);
+        }
+
+        // 幸运数字逻辑：25%概率是6或5
+        let rand = Math.random();
+        this.isTrap = false; // 默认为非陷阱
+
+        // 陷阱逻辑：10%概率是陷阱 (干扰项)
+        if (Math.random() < 0.1) {
+            this.isTrap = true;
+            this.emoji = ['💣', '💩', '📱', '🎮'][Math.floor(Math.random()*4)];
+            this.color = '#4B5563'; // 灰色
+            this.val = -1;
+        } else if (rand < 0.25) {
+            this.val = Math.random() < 0.5 ? 5 : 6;
+            this.isLucky = true;
+        } else {
+            this.val = Math.floor(Math.random() * 9) + 1;
+            this.isLucky = false;
+        }
+        
+        // 梦境模式下混入 Emoji (非陷阱)
+        if (!this.isTrap && isDreamMode && Math.random() < 0.4) {
+            this.emoji = ['🍬', '🍰', '💤', '⭐'][Math.floor(Math.random()*4)];
+        }
+        
+        if (!this.isTrap) {
+            this.color = `hsl(${Math.random() * 360}, 70%, 90%)`;
+        }
+        this.dead = false;
+    }
+
+    update(dt) {
+        this.y += this.vy * dt;
+        this.x += Math.sin(this.y * 0.02) * 0.5; // 轻微摆动
+        
+        if (this.vy < 0 && this.y < -50) this.dead = true;
+        if (this.vy > 0 && this.y > height + 50) this.dead = true;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        
+        if (this.isTrap) {
+            ctx.fillStyle = '#1F2937'; // 深灰
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#EF4444'; // 红边
+            ctx.stroke();
+        } else if (this.isLucky) {
+            ctx.fillStyle = '#fffdf0';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = COLORS.luckyBorder;
+            ctx.stroke();
+            // 幸运光晕
+            ctx.shadowColor = COLORS.luckyBorder;
+            ctx.shadowBlur = 10;
+        } else {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+        ctx.shadowBlur = 0; // 重置
+
+        // 绘制内容
+        ctx.fillStyle = this.isTrap ? '#fff' : '#333';
+        ctx.font = this.isLucky ? "bold 28px sans-serif" : "24px sans-serif";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        if (this.emoji) {
+            ctx.fillText(this.emoji, this.x, this.y);
+        } else {
+            ctx.fillText(this.val, this.x, this.y);
+        }
+        
+        // 幸运标记
+        if (this.isLucky) {
+            ctx.font = "10px sans-serif";
+            ctx.fillStyle = "#ffa500";
+            ctx.fillText("LUCKY", this.x, this.y + 15);
+        }
+        // 陷阱标记
+        if (this.isTrap) {
+            ctx.font = "10px sans-serif";
+            ctx.fillStyle = "#EF4444";
+            ctx.fillText("DON'T", this.x, this.y + 15);
+        }
+    }
+}
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 150 + 50;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.life = 1.0;
+        this.decay = Math.random() * 0.5 + 0.5;
+    }
+    update(dt) {
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+        this.life -= this.decay * dt;
+    }
+    draw() {
+        ctx.globalAlpha = Math.max(0, this.life);
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+}
+
+class FloatingText {
+    constructor(x, y, text, color) {
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.color = color;
+        this.life = 1.0;
+        this.vy = -50;
+    }
+    update(dt) {
+        this.y += this.vy * dt;
+        this.life -= dt;
+    }
+    draw() {
+        ctx.globalAlpha = Math.max(0, this.life);
+        ctx.font = "bold 24px sans-serif";
+        ctx.fillStyle = this.color;
+        ctx.fillText(this.text, this.x, this.y);
+        ctx.globalAlpha = 1;
+    }
+}
+
+function spawnBubble(isDreamMode = false) {
+    bubbles.push(new Bubble(isDreamMode));
+}
+
+function createExplosion(x, y, color) {
+    for (let i = 0; i < 8; i++) {
+        particles.push(new Particle(x, y, color));
+    }
+}
+
+function createFloatingText(x, y, text, color) {
+    floatingTexts.push(new FloatingText(x, y, text, color));
+}
+
+function updateEntities(dt) {
+    // Bubbles
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+        bubbles[i].update(dt);
+        if (bubbles[i].dead) bubbles.splice(i, 1);
+    }
+    // Particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update(dt);
+        if (particles[i].life <= 0) particles.splice(i, 1);
+    }
+    // Texts
+    for (let i = floatingTexts.length - 1; i >= 0; i--) {
+        floatingTexts[i].update(dt);
+        if (floatingTexts[i].life <= 0) floatingTexts.splice(i, 1);
+    }
+}
+
+function drawEntities() {
+    bubbles.forEach(b => b.draw());
+    particles.forEach(p => p.draw());
+    floatingTexts.forEach(t => t.draw());
+}
+
+function drawUI(gameMinutes) {
+    // 简单的得分显示
+    ctx.textAlign = 'right';
+    ctx.font = "20px sans-serif";
+    ctx.fillStyle = "#333";
+    ctx.fillText(`得分: ${score}`, width - 20, 40);
+    
+    // 进度条
+    const progress = Math.min(gameMinutes / TOTAL_MINUTES, 1);
+    ctx.fillStyle = "#eee";
+    ctx.fillRect(0, height - 5, width, 5);
+    ctx.fillStyle = COLORS.lucky;
+    ctx.fillRect(0, height - 5, width * progress, 5);
+    
+    // 显示目标分数
+    const currentTarget = STAGES[currentStageIndex].minScore;
+    if (currentTarget > 0 && currentStageIndex < 5) {
+        ctx.textAlign = 'left';
+        ctx.font = "bold 16px 'Baloo 2'";
+        ctx.fillStyle = score >= currentTarget ? COLORS.secondary : COLORS.danger;
+        ctx.fillText(`目标: ${currentTarget}`, 20, 40);
+    }
+}
+
+function checkLevelPass(stageIndex) {
+    const stageConfig = STAGES[stageIndex];
+    if (stageConfig.minScore > 0 && score < stageConfig.minScore) {
+        gameOver(`分数不足！(需要 ${stageConfig.minScore} 分)`);
+    } else {
+        // Level Up Animation
+        const toast = document.getElementById('levelUpToast');
+        toast.style.transform = 'translate(-50%, -50%) scale(1)';
+        setTimeout(() => {
+            toast.style.transform = 'translate(-50%, -50%) scale(0)';
+        }, 2000);
+        
+        // Bonus points for clearing stage
+        score += 100;
+        createFloatingText(width/2, height/2 - 50, "Level Cleared! +100", COLORS.secondary);
+    }
+}
+
+function gameOver(reason) {
+    isGameOver = true;
+    document.getElementById('gameOverScreen').style.display = 'flex';
+    document.getElementById('gameOverReason').textContent = reason;
+}
+
+/**
+ * ==========================================
+ * 输入处理 (Input Handling)
+ * ==========================================
+ */
+function playSound(type) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    const now = audioCtx.currentTime;
+    
+    if (type === 'hit') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+        gain.gain.setValueAtTime(0.1, now); // 降低音量
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+    } else if (type === 'lucky') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.2);
+        gain.gain.setValueAtTime(0.1, now); // 降低音量
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+    } else if (type === 'start') {
+        // 新增：柔和的开始音效
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.linearRampToValueAtTime(600, now + 0.5);
+        gain.gain.setValueAtTime(0.05, now); // 非常轻柔
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now);
+        osc.stop(now + 0.5);
+    } else if (type === 'trap') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.linearRampToValueAtTime(50, now + 0.3);
+        gain.gain.setValueAtTime(0.5, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+    } else if (type === 'miss') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(200, now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+    }
+}
+
+function handleInput(e) {
+    if (isGameOver) return;
+    
+    // 获取点击坐标
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // 检查是否点中泡泡
+    let hit = false;
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+        const b = bubbles[i];
+        const dx = x - b.x;
+        const dy = y - b.y;
+        if (dx*dx + dy*dy < b.r * b.r * 1.5) { // 扩大判定区域
+            hit = true;
+            processHit(b, i);
+            break; // 一次只点一个
+        }
+    }
+    
+    if (!hit) {
+        // 空挥，重置连击
+        if (combo > 0) {
+            combo = 0;
+            createFloatingText(x, y, "Miss! Combo Reset", "#999");
+            playSound('miss');
+        }
+    }
+    
+    // 阶段3：提问期 - 红灯停 (3次机会)
+    if (currentStageIndex === 3 && panicEyeState === 'OPEN') {
+        panicStrikeCount++;
+        score -= 200; // 扣分惩罚
+        navigator.vibrate && navigator.vibrate(200);
+        triggerShake(); // 屏幕震动
+        
+        if (panicStrikeCount >= 3) {
+            gameOver("老师忍你很久了！(被抓3次)");
+        } else {
+            createFloatingText(x, y, `被发现了！(${panicStrikeCount}/3)`, COLORS.danger);
+            // 屏幕闪红警告
+            document.body.style.backgroundColor = COLORS.danger;
+            setTimeout(() => document.body.style.backgroundColor = '', 100);
+        }
+        return;
+    }
+}
+
+function processHit(b, index) {
+    // 移除泡泡
+    bubbles.splice(index, 1);
+    
+    // 陷阱处理
+    if (b.isTrap) {
+        score -= 50;
+        combo = 0;
+        createExplosion(b.x, b.y, COLORS.danger);
+        createFloatingText(b.x, b.y, "Trap! -50", COLORS.danger);
+        playSound('trap');
+        triggerShake(); // 屏幕震动
+        navigator.vibrate && navigator.vibrate(100);
+        return;
+    }
+
+    // 连击处理
+    combo++;
+    if (combo > maxCombo) maxCombo = combo;
+    let comboMultiplier = 1 + (combo * 0.1); // 每次连击增加10%分数
+    
+    // 基础得分
+    let val = 10;
+    let color = '#333';
+    let text = `+${Math.floor(val * comboMultiplier)}`;
+
+    // 幸运数字逻辑
+    if (b.isLucky || b.val === 6 || b.val === 5) {
+        val = 50;
+        color = '#FF69B4'; // 粉色
+        text = `Lucky! +${Math.floor(val * comboMultiplier)}`;
+        luckyClickCount++;
+        createExplosion(b.x, b.y, COLORS.luckyBorder);
+        playSound('lucky');
+    } else {
+        createExplosion(b.x, b.y, b.color);
+        playSound('hit');
+    }
+    
+    // 显示连击文字
+    if (combo > 1) {
+        text += ` (Combo x${combo})`;
+    }
+
+    // 阶段1：困倦 - 回血视野
+    if (currentStageIndex === 1) {
+        if (b.isLucky || b.val === 6 || b.val === 5) {
+            blurLevel = 0; // 瞬间清醒
+            text = "清醒了！";
+        } else {
+            blurLevel = Math.max(0, blurLevel - 1);
+        }
+    }
+    
+    // 阶段4：数学 - 凑数
+    if (currentStageIndex === 4) {
+        if (!b.emoji) { // 忽略Emoji
+            mathCurrent += b.val;
+            // 修正：算术得分不应用连击，避免刷分太快，或者可以加少一点
+            text = `+${b.val}`; 
+            if (mathCurrent > mathTarget) {
+                text = "爆了! 归零";
+                color = COLORS.danger;
+                mathCurrent = 0;
+                combo = 0; // 算错重置连击
+                playSound('trap');
+            }
+        }
+    }
+
+    score += Math.floor(val * comboMultiplier);
+    createFloatingText(b.x, b.y, text, color);
+}
+
+</script>
+</body>
+</html>
