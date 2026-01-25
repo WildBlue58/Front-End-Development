@@ -40,8 +40,8 @@
   - BrowserRouter / 和后端路由一样，需要使用到html5 history API 
   兼容不好，ie11 之前不兼容， 现在的浏览器几乎都支持 
 - as Router 可读性 
-- 性能， 快 页面组件的懒加载
-  /   Home  延迟一下About  阻止加载
+- 性能，快 页面组件的懒加载
+  /Home  延迟一下About  阻止加载
   /About About 
 
 ### 路由有多少种？
