@@ -220,3 +220,66 @@ Promise.myAll8 = function (promises) {
         })
     })
 }
+
+Promise.myAll9 = function (promises) {
+    return new Promise((resolve, reject) => {
+        const len = promises.length
+        let count = 0
+        const result = []
+
+        Promise.forEach((p,index) => {
+            Promise.resolve(p).then((res) => {
+                result[index] = res
+                count++
+
+                if (count === len) {
+                    resolve(result)
+                }
+            }, (err) => {
+                reject(err)
+            })
+        })
+    })
+}
+
+Promise.myAll10 = function (promises) {
+    return new Promise((resolve, reject) => {
+        const len = promises.length
+        let count = 0
+        const result = []
+
+        Promise.forEach((p, index) => {
+            Promise.resolve(p).then((res) => {
+                result[index] = res
+                count++
+
+                if (count === len) {
+                    resolve(result)
+                }
+            }, (err) => {
+                reject(err)
+            })
+        })
+    })
+}
+
+Promise.myAll11 = function (promises) {
+    return new Promise((resolve, reject) => {
+        const len = promises.length
+        let count = 0
+        const result = []
+
+        Promise.forEach((p, index) => {
+            Promise.resolve(p).then((res) => {
+                result[index] = res
+                count++
+
+                if (len === count){
+                    resolve(result)
+                }
+            }, (err) => {
+                reject(err)
+            })
+        })
+    })
+}
