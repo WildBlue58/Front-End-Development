@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>大年初一 · 恭贺新禧</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-red: #c62828;
+        --bright-red: #d32f2f;
+        --deep-red: #8b0000;
+        --gold: #ffd700;
+        --light-gold: #fff59d;
+        --dark-gold: #ffa000;
+        --bg-red: #b71c1c;
+        --text-light: #fff8e1;
+        --text-dark: #3e2723;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Noto Sans SC", sans-serif;
+        background: linear-gradient(
+          180deg,
+          var(--bg-red) 0%,
+          var(--deep-red) 50%,
+          #5d0000 100%
+        );
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      .bg-pattern {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+            circle at 20% 80%,
+            rgba(255, 215, 0, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 215, 0, 0.1) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .floating-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .lantern {
+        position: absolute;
+        animation: lanternSwing 4s ease-in-out infinite;
+        transform-origin: top center;
+      }
+
+      .lantern-left {
+        top: 0;
+        left: 3%;
+      }
+
+      .lantern-right {
+        top: 0;
+        right: 3%;
+        animation-delay: 2s;
+      }
+
+      @keyframes lanternSwing {
+        0%,
+        100% {
+          transform: rotate(-8deg);
+        }
+        50% {
+          transform: rotate(8deg);
+        }
+      }
+
+      .cloud {
+        position: absolute;
+        opacity: 0.15;
+        animation: cloudFloat 30s linear infinite;
+      }
+
+      .cloud-1 {
+        top: 10%;
+        animation-duration: 35s;
+      }
+      .cloud-2 {
+        top: 30%;
+        animation-duration: 40s;
+        animation-delay: 10s;
+      }
+      .cloud-3 {
+        top: 50%;
+        animation-duration: 45s;
+        animation-delay: 20s;
+      }
+      .cloud-4 {
+        top: 70%;
+        animation-duration: 50s;
+        animation-delay: 5s;
+      }
+
+      @keyframes cloudFloat {
+        from {
+          transform: translateX(-200px);
+        }
+        to {
+          transform: translateX(calc(100vw + 200px));
+        }
+      }
+
+      .firecracker-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        animation: sparkle 2s ease-out infinite;
+      }
+
+      @keyframes sparkle {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: scale(15);
+          opacity: 0;
+        }
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 10;
+      }
+
+      header {
+        text-align: center;
+        padding: 80px 20px 60px;
+        position: relative;
+      }
+
+      .fu-decoration {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Ma Shan Zheng", cursive;
+        font-size: 4rem;
+        color: var(--primary-red);
+        box-shadow: 0 5px 30px rgba(255, 215, 0, 0.5),
+          inset 0 2px 10px rgba(255, 255, 255, 0.3);
+        animation: fuRotate 1s ease-out,
+          fuGlow 2s ease-in-out infinite alternate;
+        z-index: 100;
+      }
+
+      @keyframes fuRotate {
+        from {
+          transform: translateX(-50%) rotate(180deg) scale(0);
+        }
+        to {
+          transform: translateX(-50%) rotate(0deg) scale(1);
+        }
+      }
+
+      @keyframes fuGlow {
+        from {
+          box-shadow: 0 5px 30px rgba(255, 215, 0, 0.5);
+        }
+        to {
+          box-shadow: 0 10px 50px rgba(255, 215, 0, 0.8),
+            0 0 100px rgba(255, 215, 0, 0.3);
+        }
+      }
+
+      .main-title {
+        font-family: "Ma Shan Zheng", cursive;
+        font-size: clamp(3rem, 10vw, 6rem);
+        color: var(--gold);
+        text-shadow: 4px 4px 0 var(--deep-red), 8px 8px 0 rgba(0, 0, 0, 0.3);
+        margin-top: 80px;
+        margin-bottom: 20px;
+        animation: titleAppear 1s ease-out 0.5s both;
+      }
+
+      @keyframes titleAppear {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .subtitle {
+        font-family: "ZCOOL KuaiLe", cursive;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        color: var(--light-gold);
+        margin-bottom: 30px;
+        animation: subtitleAppear 1s ease-out 0.8s both;
+      }
+
+      @keyframes subtitleAppear {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .countdown-section {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 215, 0, 0.15),
+          rgba(255, 215, 0, 0.05)
+        );
+        border: 3px solid var(--gold);
+        border-radius: 20px;
+        padding: 40px 20px;
+        margin: 40px auto;
+        max-width: 800px;
+        backdrop-filter: blur(10px);
+        animation: sectionAppear 1s ease-out 1s both;
+      }
+
+      @keyframes sectionAppear {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .countdown-title {
+        font-family: "ZCOOL KuaiLe", cursive;
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        color: var(--gold);
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .countdown-display {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .countdown-item {
+        background: linear-gradient(145deg, var(--bright-red), var(--deep-red));
+        border-radius: 15px;
+        padding: 20px 25px;
+        min-width: 100px;
+        text-align: center;
+        border: 2px solid var(--gold);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+      }
+
+      .countdown-item:hover {
+        transform: scale(1.05);
+      }
+
+      .countdown-number {
+        font-family: "Ma Shan Zheng", cursive;
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        color: var(--gold);
+        line-height: 1;
+      }
+
+      .countdown-label {
+        font-size: clamp(0.8rem, 2vw, 1rem);
+        color: var(--light-gold);
+        margin-top: 5px;
+      }
+
+      .blessing-section {
+        padding: 60px 20px;
+      }
+
+      .section-title {
+        font-family: "Ma Shan Zheng", cursive;
+        font-size: clamp(2rem, 5vw, 3rem);
+        color: var(--gold);
+        text-align: center;
+        margin-bottom: 40px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .blessing-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .blessing-card {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.05)
+        );
+        border-radius: 20px;
+        padding: 30px;
+        border: 2px solid var(--gold);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .blessing-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 215, 0, 0.2),
+          transparent
+        );
+        animation: cardShine 3s ease-in-out infinite;
+      }
+
+      @keyframes cardShine {
+        0% {
+          left: -100%;
+        }
+        50%,
+        100% {
+          left: 100%;
+        }
+      }
+
+      .blessing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+      }
+
+      .blessing-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 20px;
+        display: block;
+      }
+
+      .blessing-title {
+        font-family: "ZCOOL KuaiLe", cursive;
+        font-size: 1.8rem;
+        color: var(--gold);
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .blessing-text {
+        font-size: 1.1rem;
+        color: var(--text-light);
+        text-align: center;
+        line-height: 1.8;
+      }
+
+      .custom-section {
+        padding: 60px 20px;
+      }
+
+      .custom-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .custom-item {
+        background: linear-gradient(
+          145deg,
+          rgba(139, 0, 0, 0.5),
+          rgba(93, 0, 0, 0.5)
+        );
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .custom-item:hover {
+        transform: scale(1.03);
+        border-color: var(--gold);
+        box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+      }
+
+      .custom-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+      }
+
+      .custom-name {
+        font-family: "ZCOOL KuaiLe", cursive;
+        font-size: 1.5rem;
+        color: var(--gold);
+        margin-bottom: 15px;
+      }
+
+      .custom-desc {
+        font-size: 1rem;
+        color: var(--light-gold);
+        line-height: 1.7;
+      }
+
+      .firework-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .click-hint {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 215, 0, 0.9);
+        color: var(--deep-red);
+        padding: 15px 30px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1rem;
+        animation: hintPulse 2s ease-in-out infinite;
+        z-index: 100;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+
+      @keyframes hintPulse {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          transform: translateX(-50%) scale(1.05);
+        }
+      }
+
+      footer {
+        text-align: center;
+        padding: 60px 20px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+      }
+
+      .footer-blessing {
+        font-family: "Ma Shan Zheng", cursive;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        color: var(--gold);
+        margin-bottom: 20px;
+      }
+
+      .footer-text {
+        font-size: 1.1rem;
+        color: var(--light-gold);
+      }
+
+      .couplet {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        writing-mode: vertical-rl;
+        font-family: "Ma Shan Zheng", cursive;
+        font-size: clamp(1.2rem, 3vw, 2rem);
+        color: var(--gold);
+        background: linear-gradient(180deg, var(--bright-red), var(--deep-red));
+        padding: 30px 15px;
+        border: 3px solid var(--gold);
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        z-index: 5;
+        animation: coupletAppear 1s ease-out 1.5s both;
+      }
+
+      @keyframes coupletAppear {
+        from {
+          opacity: 0;
+          transform: translateY(-50%) translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(-50%) translateX(0);
+        }
+      }
+
+      .couplet-left {
+        left: 10px;
+      }
+
+      .couplet-right {
+        right: 10px;
+        animation-delay: 1.7s;
+      }
+
+      @keyframes coupletAppearRight {
+        from {
+          opacity: 0;
+          transform: translateY(-50%) translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(-50%) translateX(0);
+        }
+      }
+
+      .couplet-right {
+        animation: coupletAppearRight 1s ease-out 1.7s both;
+      }
+
+      .firecracker {
+        position: fixed;
+        bottom: 0;
+        width: 30px;
+        animation: firecrackerFall 3s linear infinite;
+        z-index: 2;
+      }
+
+      @keyframes firecrackerFall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .couplet {
+          display: none;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .lantern {
+          width: 60px;
+          height: 100px;
+        }
+
+        .countdown-item {
+          min-width: 80px;
+          padding: 15px 20px;
+        }
+
+        .blessing-card {
+          padding: 25px;
+        }
+
+        .click-hint {
+          padding: 12px 25px;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        header {
+          padding: 60px 15px 40px;
+        }
+
+        .fu-decoration {
+          width: 70px;
+          height: 70px;
+          font-size: 3rem;
+        }
+
+        .main-title {
+          margin-top: 60px;
+        }
+
+        .countdown-display {
+          gap: 10px;
+        }
+
+        .countdown-item {
+          min-width: 70px;
+          padding: 12px 15px;
+        }
+      }
+
+      .scroll-indicator {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: scrollBounce 2s ease-in-out infinite;
+      }
+
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(10px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-pattern"></div>
+
+    <div class="floating-elements">
+      <svg
+        class="lantern lantern-left"
+        width="80"
+        height="130"
+        viewBox="0 0 80 130"
+      >
+        <defs>
+          <linearGradient id="lanternBody" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color: #ff5252" />
+            <stop offset="50%" style="stop-color: #d32f2f" />
+            <stop offset="100%" style="stop-color: #b71c1c" />
+          </linearGradient>
+          <filter id="lanternGlow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <rect x="25" y="0" width="30" height="12" rx="2" fill="#FFD700" />
+        <rect x="35" y="12" width="10" height="8" fill="#FFD700" />
+        <ellipse
+          cx="40"
+          cy="65"
+          rx="35"
+          ry="45"
+          fill="url(#lanternBody)"
+          filter="url(#lanternGlow)"
+        />
+        <ellipse cx="40" cy="65" rx="25" ry="32" fill="#FFCDD2" opacity="0.3" />
+        <rect x="25" y="110" width="30" height="8" rx="2" fill="#FFD700" />
+        <g fill="#FFD700">
+          <rect x="30" y="118" width="3" height="12" rx="1" />
+          <rect x="37" y="118" width="3" height="12" rx="1" />
+          <rect x="44" y="118" width="3" height="12" rx="1" />
+        </g>
+        <text
+          x="40"
+          y="72"
+          text-anchor="middle"
+          fill="#FFD700"
+          font-family="Ma Shan Zheng, cursive"
+          font-size="28"
+          font-weight="bold"
+        >
+          福
+        </text>
+      </svg>
+
+      <svg
+        class="lantern lantern-right"
+        width="80"
+        height="130"
+        viewBox="0 0 80 130"
+      >
+        <ellipse
+          cx="40"
+          cy="65"
+          rx="35"
+          ry="45"
+          fill="url(#lanternBody)"
+          filter="url(#lanternGlow)"
+        />
+        <ellipse cx="40" cy="65" rx="25" ry="32" fill="#FFCDD2" opacity="0.3" />
+        <rect x="25" y="0" width="30" height="12" rx="2" fill="#FFD700" />
+        <rect x="35" y="12" width="10" height="8" fill="#FFD700" />
+        <rect x="25" y="110" width="30" height="8" rx="2" fill="#FFD700" />
+        <g fill="#FFD700">
+          <rect x="30" y="118" width="3" height="12" rx="1" />
+          <rect x="37" y="118" width="3" height="12" rx="1" />
+          <rect x="44" y="118" width="3" height="12" rx="1" />
+        </g>
+        <text
+          x="40"
+          y="72"
+          text-anchor="middle"
+          fill="#FFD700"
+          font-family="Ma Shan Zheng, cursive"
+          font-size="28"
+          font-weight="bold"
+        >
+          春
+        </text>
+      </svg>
+
+      <svg class="cloud cloud-1" width="200" height="100" viewBox="0 0 200 100">
+        <ellipse cx="50" cy="60" rx="40" ry="25" fill="#FFD700" />
+        <ellipse cx="100" cy="50" rx="50" ry="35" fill="#FFD700" />
+        <ellipse cx="150" cy="60" rx="40" ry="25" fill="#FFD700" />
+      </svg>
+
+      <svg class="cloud cloud-2" width="180" height="90" viewBox="0 0 180 90">
+        <ellipse cx="45" cy="55" rx="35" ry="22" fill="#FFD700" />
+        <ellipse cx="90" cy="45" rx="45" ry="30" fill="#FFD700" />
+        <ellipse cx="135" cy="55" rx="35" ry="22" fill="#FFD700" />
+      </svg>
+
+      <svg class="cloud cloud-3" width="160" height="80" viewBox="0 0 160 80">
+        <ellipse cx="40" cy="50" rx="30" ry="20" fill="#FFD700" />
+        <ellipse cx="80" cy="40" rx="40" ry="28" fill="#FFD700" />
+        <ellipse cx="120" cy="50" rx="30" ry="20" fill="#FFD700" />
+      </svg>
+
+      <svg class="cloud cloud-4" width="140" height="70" viewBox="0 0 140 70">
+        <ellipse cx="35" cy="45" rx="25" ry="18" fill="#FFD700" />
+        <ellipse cx="70" cy="35" rx="35" ry="25" fill="#FFD700" />
+        <ellipse cx="105" cy="45" rx="25" ry="18" fill="#FFD700" />
+      </svg>
+    </div>
+
+    <div class="couplet couplet-left">龙腾盛世千家喜</div>
+    <div class="couplet couplet-right">蛇舞新春万象新</div>
+
+    <canvas class="firework-canvas" id="fireworkCanvas"></canvas>
+
+    <div class="container">
+      <header>
+        <div class="fu-decoration">福</div>
+        <h1 class="main-title">大年初一</h1>
+        <p class="subtitle">恭贺新禧 · 万事如意</p>
+
+        <svg
+          class="scroll-indicator"
+          width="40"
+          height="40"
+          viewBox="0 0 40 40"
+        >
+          <circle
+            cx="20"
+            cy="20"
+            r="18"
+            fill="none"
+            stroke="#FFD700"
+            stroke-width="2"
+          />
+          <path
+            d="M 20 12 L 20 28 M 14 22 L 20 28 L 26 22"
+            stroke="#FFD700"
+            stroke-width="2"
+            fill="none"
+          />
+        </svg>
+      </header>
+
+      <section class="countdown-section">
+        <h2 class="countdown-title">🎊 距离下一个春节还有 🎊</h2>
+        <div class="countdown-display">
+          <div class="countdown-item">
+            <div class="countdown-number" id="days">00</div>
+            <div class="countdown-label">天</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" id="hours">00</div>
+            <div class="countdown-label">时</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" id="minutes">00</div>
+            <div class="countdown-label">分</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" id="seconds">00</div>
+            <div class="countdown-label">秒</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="blessing-section">
+        <h2 class="section-title">🧧 新年祝福 🧧</h2>
+        <div class="blessing-cards">
+          <div class="blessing-card">
+            <svg class="blessing-icon" viewBox="0 0 70 70">
+              <circle cx="35" cy="35" r="32" fill="#FFD700" />
+              <circle cx="35" cy="35" r="26" fill="#C62828" />
+              <text
+                x="35"
+                y="43"
+                text-anchor="middle"
+                fill="#FFD700"
+                font-family="Ma Shan Zheng, cursive"
+                font-size="28"
+              >
+                财
+              </text>
+            </svg>
+            <h3 class="blessing-title">财源广进</h3>
+            <p class="blessing-text">
+              金银满屋，财源滚滚来<br />事业蒸蒸日上，富贵吉祥
+            </p>
+          </div>
+
+          <div class="blessing-card">
+            <svg class="blessing-icon" viewBox="0 0 70 70">
+              <circle cx="35" cy="35" r="32" fill="#FFD700" />
+              <circle cx="35" cy="35" r="26" fill="#C62828" />
+              <text
+                x="35"
+                y="43"
+                text-anchor="middle"
+                fill="#FFD700"
+                font-family="Ma Shan Zheng, cursive"
+                font-size="28"
+              >
+                福
+              </text>
+            </svg>
+            <h3 class="blessing-title">福星高照</h3>
+            <p class="blessing-text">
+              福气盈门，幸福美满<br />阖家欢乐，万事顺遂
+            </p>
+          </div>
+
+          <div class="blessing-card">
+            <svg class="blessing-icon" viewBox="0 0 70 70">
+              <circle cx="35" cy="35" r="32" fill="#FFD700" />
+              <circle cx="35" cy="35" r="26" fill="#C62828" />
+              <text
+                x="35"
+                y="43"
+                text-anchor="middle"
+                fill="#FFD700"
+                font-family="Ma Shan Zheng, cursive"
+                font-size="28"
+              >
+                康
+              </text>
+            </svg>
+            <h3 class="blessing-title">身体健康</h3>
+            <p class="blessing-text">
+              身体康健，精神焕发<br />平安喜乐，长命百岁
+            </p>
+          </div>
+
+          <div class="blessing-card">
+            <svg class="blessing-icon" viewBox="0 0 70 70">
+              <circle cx="35" cy="35" r="32" fill="#FFD700" />
+              <circle cx="35" cy="35" r="26" fill="#C62828" />
+              <text
+                x="35"
+                y="43"
+                text-anchor="middle"
+                fill="#FFD700"
+                font-family="Ma Shan Zheng, cursive"
+                font-size="28"
+              >
+                顺
+              </text>
+            </svg>
+            <h3 class="blessing-title">一帆风顺</h3>
+            <p class="blessing-text">
+              心想事成，诸事顺利<br />前程似锦，步步高升
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="custom-section">
+        <h2 class="section-title">🏮 传统习俗 🏮</h2>
+        <div class="custom-grid">
+          <div class="custom-item">
+            <svg class="custom-icon" viewBox="0 0 80 80">
+              <rect
+                x="15"
+                y="10"
+                width="50"
+                height="60"
+                rx="5"
+                fill="#FFD700"
+              />
+              <rect x="20" y="15" width="40" height="50" fill="#C62828" />
+              <circle cx="40" cy="35" r="12" fill="#FFD700" />
+              <text
+                x="40"
+                y="40"
+                text-anchor="middle"
+                fill="#C62828"
+                font-size="14"
+                font-weight="bold"
+              >
+                喜
+              </text>
+            </svg>
+            <h3 class="custom-name">拜年贺岁</h3>
+            <p class="custom-desc">
+              晚辈向长辈拜年，祝福新年吉祥，长辈给晚辈压岁钱，寓意平安顺遂
+            </p>
+          </div>
+
+          <div class="custom-item">
+            <svg class="custom-icon" viewBox="0 0 80 80">
+              <ellipse cx="40" cy="45" rx="30" ry="25" fill="#FFD700" />
+              <ellipse cx="40" cy="40" rx="25" ry="20" fill="#C62828" />
+              <path
+                d="M 25 35 Q 40 25 55 35"
+                stroke="#FFD700"
+                stroke-width="3"
+                fill="none"
+              />
+              <circle cx="30" cy="35" r="3" fill="#FFD700" />
+              <circle cx="50" cy="35" r="3" fill="#FFD700" />
+            </svg>
+            <h3 class="custom-name">吃饺子</h3>
+            <p class="custom-desc">
+              北方习俗，饺子形似元宝，寓意招财进宝，新年财源滚滚
+            </p>
+          </div>
+
+          <div class="custom-item">
+            <svg class="custom-icon" viewBox="0 0 80 80">
+              <rect
+                x="20"
+                y="20"
+                width="40"
+                height="50"
+                rx="3"
+                fill="#C62828"
+              />
+              <rect x="25" y="25" width="30" height="40" fill="#FFD700" />
+              <text
+                x="40"
+                y="50"
+                text-anchor="middle"
+                fill="#C62828"
+                font-family="Ma Shan Zheng, cursive"
+                font-size="20"
+              >
+                福
+              </text>
+            </svg>
+            <h3 class="custom-name">贴春联</h3>
+            <p class="custom-desc">
+              门上贴春联、福字，寓意辞旧迎新，祈求新年平安吉祥
+            </p>
+          </div>
+
+          <div class="custom-item">
+            <svg class="custom-icon" viewBox="0 0 80 80">
+              <rect
+                x="25"
+                y="15"
+                width="30"
+                height="50"
+                rx="2"
+                fill="#C62828"
+              />
+              <rect x="30" y="20" width="20" height="15" fill="#FFD700" />
+              <rect x="30" y="40" width="20" height="20" fill="#FFD700" />
+              <line
+                x1="35"
+                y1="25"
+                x2="45"
+                y2="30"
+                stroke="#C62828"
+                stroke-width="2"
+              />
+              <line
+                x1="35"
+                y1="30"
+                x2="45"
+                y2="25"
+                stroke="#C62828"
+                stroke-width="2"
+              />
+            </svg>
+            <h3 class="custom-name">放鞭炮</h3>
+            <p class="custom-desc">
+              燃放鞭炮驱邪避祟，迎接新年，祈求来年平安顺遂
+            </p>
+          </div>
+
+          <div class="custom-item">
+            <svg class="custom-icon" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="25" fill="#FFD700" />
+              <circle cx="40" cy="40" r="20" fill="#C62828" />
+              <circle cx="35" cy="35" r="4" fill="#FFD700" />
+              <circle cx="45" cy="35" r="4" fill="#FFD700" />
+              <path
+                d="M 32 45 Q 40 52 48 45"
+                stroke="#FFD700"
+                stroke-width="3"
+                fill="none"
+              />
+            </svg>
+            <h3 class="custom-name">团圆饭</h3>
+            <p class="custom-desc">
+              全家团聚吃年夜饭，共享天伦之乐，寓意团圆美满
+            </p>
+          </div>
+
+          <div class="custom-item">
+            <svg class="custom-icon" viewBox="0 0 80 80">
+              <rect
+                x="15"
+                y="25"
+                width="50"
+                height="35"
+                rx="5"
+                fill="#C62828"
+              />
+              <rect x="20" y="30" width="40" height="25" fill="#FFD700" />
+              <circle cx="30" cy="42" r="5" fill="#C62828" />
+              <circle cx="50" cy="42" r="5" fill="#C62828" />
+              <rect x="35" y="20" width="10" height="10" fill="#FFD700" />
+            </svg>
+            <h3 class="custom-name">压岁钱</h3>
+            <p class="custom-desc">
+              长辈给晚辈红包，寓意压住邪祟，保佑孩子平安成长
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p class="footer-blessing">新春快乐 · 阖家幸福</p>
+        <p class="footer-text">愿新的一年，所有美好如期而至</p>
+      </footer>
+    </div>
+
+    <div class="click-hint" id="clickHint">🎉 点击屏幕放烟花 🎉</div>
+
+    <script>
+      const canvas = document.getElementById("fireworkCanvas");
+      const ctx = canvas.getContext("2d");
+      let fireworks = [];
+      let particles = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      class Firework {
+        constructor(x, y, targetY) {
+          this.x = x;
+          this.y = y;
+          this.targetY = targetY;
+          this.speed = 8 + Math.random() * 4;
+          this.angle = -Math.PI / 2 + (Math.random() - 0.5) * 0.3;
+          this.vx = Math.cos(this.angle) * this.speed;
+          this.vy = Math.sin(this.angle) * this.speed;
+          this.trail = [];
+          this.exploded = false;
+          this.hue = Math.random() * 60 + 10;
+        }
+
+        update() {
+          this.trail.push({ x: this.x, y: this.y });
+          if (this.trail.length > 10) this.trail.shift();
+
+          this.x += this.vx;
+          this.y += this.vy;
+          this.vy += 0.15;
+
+          if (this.vy >= 0 || this.y <= this.targetY) {
+            this.explode();
+            return true;
+          }
+          return false;
+        }
+
+        explode() {
+          const particleCount = 80 + Math.floor(Math.random() * 40);
+          for (let i = 0; i < particleCount; i++) {
+            const angle = ((Math.PI * 2) / particleCount) * i;
+            const speed = 2 + Math.random() * 6;
+            particles.push(
+              new Particle(
+                this.x,
+                this.y,
+                Math.cos(angle) * speed,
+                Math.sin(angle) * speed,
+                this.hue
+              )
+            );
+          }
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = `hsl(${this.hue}, 100%, 70%)`;
+          ctx.fill();
+
+          for (let i = 0; i < this.trail.length; i++) {
+            const alpha = i / this.trail.length;
+            ctx.beginPath();
+            ctx.arc(this.trail[i].x, this.trail[i].y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${alpha})`;
+            ctx.fill();
+          }
+        }
+      }
+
+      class Particle {
+        constructor(x, y, vx, vy, hue) {
+          this.x = x;
+          this.y = y;
+          this.vx = vx;
+          this.vy = vy;
+          this.hue = hue + Math.random() * 30 - 15;
+          this.alpha = 1;
+          this.decay = 0.015 + Math.random() * 0.01;
+          this.gravity = 0.08;
+        }
+
+        update() {
+          this.vx *= 0.98;
+          this.vy *= 0.98;
+          this.vy += this.gravity;
+          this.x += this.vx;
+          this.y += this.vy;
+          this.alpha -= this.decay;
+          return this.alpha > 0;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.alpha})`;
+          ctx.fill();
+        }
+      }
+
+      function createFirework(x, y) {
+        const targetY = y * 0.3 + Math.random() * y * 0.4;
+        fireworks.push(new Firework(x, canvas.height, targetY));
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        fireworks = fireworks.filter((fw) => {
+          fw.draw();
+          return !fw.update();
+        });
+
+        particles = particles.filter((p) => {
+          p.draw();
+          return p.update();
+        });
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+
+      document.addEventListener("click", (e) => {
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            createFirework(e.clientX + (Math.random() - 0.5) * 100, e.clientY);
+          }, i * 100);
+        }
+      });
+
+      function autoFirework() {
+        if (Math.random() < 0.03) {
+          createFirework(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height * 0.5
+          );
+        }
+        setTimeout(autoFirework, 100);
+      }
+      autoFirework();
+
+      function updateCountdown() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        let nextSpringFestival = new Date(currentYear + 1, 0, 29);
+
+        if (now.getMonth() === 0 && now.getDate() <= 15) {
+          nextSpringFestival = new Date(currentYear, 0, 29);
+        }
+
+        const diff = nextSpringFestival - now;
+
+        if (diff <= 0) {
+          document.getElementById("days").textContent = "00";
+          document.getElementById("hours").textContent = "00";
+          document.getElementById("minutes").textContent = "00";
+          document.getElementById("seconds").textContent = "00";
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = String(days).padStart(
+          2,
+          "0"
+        );
+        document.getElementById("hours").textContent = String(hours).padStart(
+          2,
+          "0"
+        );
+        document.getElementById("minutes").textContent = String(
+          minutes
+        ).padStart(2, "0");
+        document.getElementById("seconds").textContent = String(
+          seconds
+        ).padStart(2, "0");
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      const hint = document.getElementById("clickHint");
+      setTimeout(() => {
+        hint.style.opacity = "0";
+        setTimeout(() => hint.remove(), 500);
+      }, 8000);
+
+      function createFallingFirecracker() {
+        const firecracker = document.createElement("div");
+        firecracker.className = "firecracker";
+        firecracker.style.left = Math.random() * 100 + "vw";
+        firecracker.style.animationDuration = 3 + Math.random() * 4 + "s";
+        firecracker.innerHTML = `
+                <svg width="30" height="50" viewBox="0 0 30 50">
+                    <rect x="5" y="0" width="20" height="45" rx="3" fill="#C62828"/>
+                    <rect x="8" y="5" width="14" height="10" fill="#FFD700"/>
+                    <rect x="8" y="20" width="14" height="10" fill="#FFD700"/>
+                    <rect x="8" y="35" width="14" height="5" fill="#FFD700"/>
+                    <line x1="15" y1="0" x2="15" y2="-10" stroke="#333" stroke-width="2"/>
+                    <circle cx="15" cy="-12" r="3" fill="#FF6B35"/>
+                </svg>
+            `;
+        document.querySelector(".floating-elements").appendChild(firecracker);
+        setTimeout(() => firecracker.remove(), 7000);
+      }
+
+      setInterval(createFallingFirecracker, 2000);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = "1";
+              entry.target.style.transform = "translateY(0)";
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      document
+        .querySelectorAll(".blessing-card, .custom-item")
+        .forEach((el) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(30px)";
+          el.style.transition = "all 0.6s ease-out";
+          observer.observe(el);
+        });
+    </script>
+  </body>
+</html>
