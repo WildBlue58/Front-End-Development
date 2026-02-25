@@ -1,143 +1,142 @@
-class LRU{
-    constructor(capacity) {
-        this.capacity = capacity
-        this.map = new Map()
+class LRU {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.map = new Map();
+  }
+
+  get(key) {
+    if (!this.map.has(key)) return -1;
+
+    const value = this.map.get(key);
+    this.map.delete(key);
+    this.map.set(key, value);
+
+    return value;
+  }
+
+  put(key, value) {
+    if (this.map.has(key)) {
+      this.map.delete(key);
     }
 
-    get(key) {
-        if (!this.map.has(key)) return -1
-        
-        const value = this.map.get(key)
-        this.map.delete(key)
-        this.map.set(key, value)
-        
-        return value
-    }
+    this.map.set(key, value);
 
-    put(key, value) {
-        if (this.map.has(key)) {
-           this.map.delete(key) 
-        }
-
-        this.map.set(key, value)
-        
-        if (this.map.size > this.capacity) {
-            this.map.delete(this.map.keys().next().value)
-        }
+    if (this.map.size > this.capacity) {
+      this.map.delete(this.map.keys().next().value);
     }
+  }
 }
 
-class LRU1{
-    constructor(capacity) {
-        this.capacity = capacity
-        this.map = new Map()
+class LRU1 {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.map = new Map();
+  }
+
+  get(key) {
+    if (!this.map.has(key)) return -1;
+
+    const value = this.map.get(key);
+    this.map.delete(key);
+    this.map.set(key, value);
+
+    return value;
+  }
+
+  put(key, value) {
+    if (this.map.has(key)) {
+      this.map.delete(key);
     }
 
+    this.map.set(key, value);
 
-    get(key) {
-        if (!this.map.has(key)) return -1
-        
-        const value = this.map.get(key)
-        this.map.delete(key)
-        this.map.set(key, value)
-        
-        return value
+    if (this.map.size > this.capacity) {
+      this.map.delete(this.map.keys().next().value);
     }
-
-    put(key, value) {
-        if (this.map.has(key)) {
-            this.map.delete(key)
-        }
-
-        this.map.set(key, value)
-        
-        if (this.map.size > this.capacity) {
-            this.map.delete(this.map.keys().next().value)
-        }
-    }
+  }
 }
 
-class LRU2{
-    constructor(capacity) {
-        this.capacity = capacity
-        this.map = new Map()
+class LRU2 {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.map = new Map();
+  }
+
+  get(key) {
+    if (!this.map.has(key)) return -1;
+
+    const value = this.map.get(key);
+    this.map.delete(key);
+    this.map.set(key, value);
+
+    return value;
+  }
+
+  set(key, value) {
+    if (this.map.has(key)) {
+      this.map.delete(key);
     }
 
-    get(key) {
-        if (!this.map.has(key)) return -1
-        
-        const value = this.map.get(key)
-        this.map.delete(key)
-        this.map.set(key, value)
-        
-        return value
-    }
+    this.map.set(key, value);
 
-    set(key, value) {
-        if (this.map.has(key)) {
-            this.map.delete(key)
-        }
-
-        this.map.set(key, value)
-        
-        if (this.map.size > this.capacity) {
-            this.map.delete(this.map.keys().next().value)
-        }
+    if (this.map.size > this.capacity) {
+      this.map.delete(this.map.keys().next().value);
     }
+  }
 }
 
-class LRU3{
-    constructor(capacity) {
-        this.capacity = capacity
-        this.map = new Map()
+class LRU3 {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.map = new Map();
+  }
+
+  get(key) {
+    if (!this.map.has(key)) return -1;
+
+    const value = this.map.get(key);
+    this.map.delete(key);
+    this.map.set(key, value);
+
+    return value;
+  }
+
+  set(key, value) {
+    if (this.map.has(key)) {
+      this.map.delete(key);
     }
 
-    get(key) {
-        if (!this.map.has(key)) return -1
-        
-        const value = this.map.get(key)
-        this.map.delete(key)
-        this.map.set(key,value)
+    this.map.set(key, value);
 
-        return value
+    if (this.map.size > this.capacity) {
+      this.map.delete(this.map.keys().next().value);
     }
-
-    set(key, value) {
-        if (this.map.has(key)) {
-            this.map.delete(key)
-        }
-
-        this.map.set(key, value)
-        
-        if (this.map.size > this.capacity) {
-            this.map.delete(this.map.keys().next().value)
-        }
-    }
+  }
 }
 
-class LRU4{
-    constructor(capacity) {
-        this.capacity = capacity
-        this.map = new Map()
+class LRU4 {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.map = new Map();
+  }
+
+  get(key) {
+    if (!this.map.has(key)) return -1;
+
+    const value = this.map.set(key);
+    this.map.delete(key);
+    this.map.set(key, value);
+  }
+
+  set(key, value) {
+    if (this.map.has(key)) {
+      this.map.delete(key);
     }
 
-    get(key) {
-        if (!this.map.has(key)) return -1
-        
-        const value = this.map.set(key)
-        this.map.delete(key)
-        this.map.set(key,value)
-    }
+    this.map.set(key, value);
 
-    set(key, value) {
-        if (this.map.has(key)) {
-            this.map.delete(key)
-        }
-
-        this.map.set(key, value)
-        
-        if (this.map.size > this.capacity) {
-            this.map.delete(this.map.keys().next().value)
-        }
+    if (this.map.size > this.capacity) {
+      this.map.delete(this.map.keys().next().value);
     }
+  }
 }

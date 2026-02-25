@@ -13,12 +13,15 @@ NestJS 是一个用于构建高效、可扩展的 Node.js 服务器端应用程�
 ## 核心概念
 
 ### 1. Modules (模块)
+
 模块是具有 `@Module()` 装饰器的类。`@Module()` 装饰器提供了元数据，Nest 用它来组织应用程序结构。每个 Nest 应用程序至少有一个模块，即根模块 (Root Module)。
 
 ### 2. Controllers (控制器)
+
 控制器负责处理传入的请求并将响应返回给客户端。它们使用 `@Controller()` 装饰器定义，并使用如 `@Get()`, `@Post()` 等装饰器来处理特定的 HTTP 请求。
 
 ### 3. Providers (提供者)
+
 Provider 是 Nest 的基本概念。许多基本的 Nest 类可能被视为 provider - service, repository, factory, helper 等等。它们可以通过构造函数注入依赖关系。通常使用 `@Injectable()` 装饰器标记。
 
 ## 快速开始
@@ -40,13 +43,13 @@ nest new project-name
 一个简单的控制器示例：
 
 ```typescript
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get } from "@nestjs/common";
 
-@Controller('cats')
+@Controller("cats")
 export class CatsController {
   @Get()
   findAll(): string {
-    return 'This action returns all cats';
+    return "This action returns all cats";
   }
 }
 ```
