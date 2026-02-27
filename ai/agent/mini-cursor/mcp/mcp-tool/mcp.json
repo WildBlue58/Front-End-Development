@@ -1,0 +1,9 @@
+{
+  "name": "my-mcp-server",
+  "version": "1.0.0",
+  "command": "node",
+  "args": [
+    "D:\\lesson_zp\\ai\\agent\\mini-cursor\\mcp\\mcp-tool\\my-mcp-server.mjs"
+  ],
+  "env": {}
+}
