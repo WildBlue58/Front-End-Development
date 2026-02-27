@@ -1,0 +1,59 @@
+# TodoList UI 重构 — 完工报告
+
+使用 **ui-ux-pro-max** 技能重构了 React + Vite + TypeScript 待办清单应用的完整视觉系统。业务逻辑零改动。
+
+---
+
+## 改动文件
+
+| 文件 | 改动内容 |
+|------|----------|
+| [index.css](file:///d:/lesson_zp/ai/agent/mini-cursor/todolist/src/index.css) | 全新设计系统：CSS 变量、字体、背景渐变、玻璃卡片、动画 |
+| [App.tsx](file:///d:/lesson_zp/ai/agent/mini-cursor/todolist/src/App.tsx) | 渐变大标题、双重计数 badge、SVG 空状态插图 |
+| [TodoInput.tsx](file:///d:/lesson_zp/ai/agent/mini-cursor/todolist/src/components/TodoInput.tsx) | SVG `+` 图标 + 橙色 CTA 按钮 |
+| [TodoItem.tsx](file:///d:/lesson_zp/ai/agent/mini-cursor/todolist/src/components/TodoItem.tsx) | SVG check 图标（替换 `✓` 文字）、SVG 垃圾桶删除图标 |
+| [TodoFilter.tsx](file:///d:/lesson_zp/ai/agent/mini-cursor/todolist/src/components/TodoFilter.tsx) | Teal 渐变 pill 激活 Tab |
+
+---
+
+## 设计系统（来自 ui-ux-pro-max 技能）
+
+| 维度 | 值 |
+|------|-----|
+| 风格 | Flat Design + Dark Glassmorphism |
+| 主色 | `#0D9488` Teal |
+| 辅色 | `#14B8A6` Teal Light |
+| CTA | `#F97316` Orange |
+| 字体 | Inter 900 (标题) · DM Sans (正文) |
+| 效果 | `backdrop-filter: blur(12px)`, slideIn 动画 220ms |
+
+---
+
+## 截图验证
+
+````carousel
+![空状态视图 — SVG 插图 + 橙色添加按钮](C:\Users\MR\.gemini\antigravity\brain\9a6ddaf1-ff71-4a40-acc7-cbbbf4484ca9\initial_view_1772195031701.png)
+<!-- slide -->
+![带完成项的列表 — Teal 勾选框、划线文字、双计数 badge、Teal 筛选 Tab](C:\Users\MR\.gemini\antigravity\brain\9a6ddaf1-ff71-4a40-acc7-cbbbf4484ca9\one_completed_item_1772195101010.png)
+````
+
+---
+
+## 验证结果
+
+| 检查项 | 状态 |
+|--------|------|
+| `pnpm run build` TypeScript 编译 | ✅ ✓ built in 932ms |
+| 无 emoji 图标（全部 SVG） | ✅ |
+| 深色背景 + 径向渐变 | ✅ |
+| 玻璃卡片 `backdrop-filter: blur` | ✅ |
+| Inter / DM Sans 字体加载 | ✅ |
+| 橙色 CTA `+ 添加` 按钮 | ✅ |
+| Teal 渐变标题文字 | ✅ |
+| Teal 勾选框（已完成状态） | ✅ |
+| 删除按钮 SVG 垃圾桶 | ✅ |
+| 完成态划线 + 文字渐淡 | ✅ |
+| 筛选 Tab Teal 高亮 pill | ✅ |
+| 双计数 badge（未完成 · 已完成） | ✅ |
+| SVG 空状态插图 | ✅ |
+| `prefers-reduced-motion` 兼容 | ✅ |
