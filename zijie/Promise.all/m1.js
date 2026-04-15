@@ -27,259 +27,364 @@
 
 Promise.myAll = function (promises) {
     return new Promise((resolve, reject) => {
-        const result = []
-        let count = 0
-        const len = promises.length
+        const result = [];
+        let count = 0;
+        const len = promises.length;
 
         if (len === 0) {
-            return resolve(result)
+            return resolve(result);
         }
 
         promises.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll2 = function (promises) {
     return new Promise((resolve, reject) => {
-        const result = []
-        let count = 0
-        const len = promises.length
+        const result = [];
+        let count = 0;
+        const len = promises.length;
 
         if (len === 0) {
-            return resolve(result)
+            return resolve(result);
         }
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll3 = function (promises) {
     return new Promise((resolve, reject) => {
-        const result = []
-        let count = 0
-        const len = promises.length
-        
-        if (len === 0) {
-            return resolve(result)
-        }
-
-        Promise.forEach((p,index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
-
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
-
-Promise.myAll4 = function (promises){
-    return new Promise((resolve, reject) => {
-        const result = []
-        let count = 0
-        const len = promises.length
+        const result = [];
+        let count = 0;
+        const len = promises.length;
 
         if (len === 0) {
-            return resolve(result)
+            return resolve(result);
         }
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
+
+Promise.myAll4 = function (promises) {
+    return new Promise((resolve, reject) => {
+        const result = [];
+        let count = 0;
+        const len = promises.length;
+
+        if (len === 0) {
+            return resolve(result);
+        }
+
+        Promise.forEach((p, index) => {
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
+
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll5 = function (promises) {
     return new Promise((resolve, reject) => {
-        const result = []
-        let count = 0
-        const len = promises.length
+        const result = [];
+        let count = 0;
+        const len = promises.length;
 
         if (len === 0) {
-            return resolve(result)
+            return resolve(result);
         }
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
-Promise.myAll6 = function (promises){
+Promise.myAll6 = function (promises) {
     return new Promise((resolve, reject) => {
-        const result = []
-        let count = 0
-        const len = promises.length
+        const result = [];
+        let count = 0;
+        const len = promises.length;
 
         if (len === 0) {
-            return resolve(promises)
+            return resolve(promises);
         }
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll7 = function (promises) {
     return new Promise((resolve, reject) => {
-        const result = []
-        let count = 0
-        const len = promises.length
+        const result = [];
+        let count = 0;
+        const len = promises.length;
 
         if (len === 0) {
-            return resolve(promises)
+            return resolve(promises);
         }
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(promises)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(promises);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll8 = function (promises) {
     return new Promise((resolve, reject) => {
-        const len = promises.length
-        let count = 0
-        const result = []
+        const len = promises.length;
+        let count = 0;
+        const result = [];
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll9 = function (promises) {
     return new Promise((resolve, reject) => {
-        const len = promises.length
-        let count = 0
-        const result = []
+        const len = promises.length;
+        let count = 0;
+        const result = [];
 
-        Promise.forEach((p,index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+        Promise.forEach((p, index) => {
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll10 = function (promises) {
     return new Promise((resolve, reject) => {
-        const len = promises.length
-        let count = 0
-        const result = []
+        const len = promises.length;
+        let count = 0;
+        const result = [];
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (count === len) {
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
 
 Promise.myAll11 = function (promises) {
     return new Promise((resolve, reject) => {
-        const len = promises.length
-        let count = 0
-        const result = []
+        const len = promises.length;
+        let count = 0;
+        const result = [];
 
         Promise.forEach((p, index) => {
-            Promise.resolve(p).then((res) => {
-                result[index] = res
-                count++
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
 
-                if (len === count){
-                    resolve(result)
-                }
-            }, (err) => {
-                reject(err)
-            })
-        })
-    })
-}
+                    if (len === count) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
+
+Promise.myAll12 = function (promises) {
+    return new Promise((resolve, reject) => {
+        const len = promises.length;
+        let count = 0;
+        const result = [];
+
+        Promise.forEach((p, index) => {
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
+
+                    if (len === count) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
+
+Promise.myAll13 = function (promises) {
+    return new Promise((resolve, reject) => {
+        const len = promises.length;
+        let count = 0;
+        const result = [];
+
+        Promise.forEach((p, index) => {
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
+
+                    if (len === count) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
+
+Promise.myAll14 = function (promises) {
+    return new Promise((resolve, reject) => {
+        const len = promises.length;
+        let count = 0;
+        const result = [];
+
+        Promise.forEach((p, index) => {
+            Promise.resolve(p).then(
+                (res) => {
+                    result[index] = res;
+                    count++;
+
+                    if (count === len) {
+                        resolve(result);
+                    }
+                },
+                (err) => {
+                    reject(err);
+                },
+            );
+        });
+    });
+};
