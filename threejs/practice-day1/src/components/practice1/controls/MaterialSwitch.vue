@@ -1,22 +1,22 @@
 <!-- ============================================================
-     MaterialSwitch.vue — 材质切换组件
+     MaterialSwitch.vue —材质切换组件
      
-     职责：让用户在 Standard 和 Basic 两种材质之间切换
+     职责：让用户在Standard 和Basic 两种材质之间切换
      
      单一职责：只管材质类型切换
      
      TDesign 组件：
      - t-radio-group: 单选按钮组
-     - t-radio-button: 单选按钮
+     - t-radio-button: 单选按针
 ============================================================ -->
 
 <script setup lang="ts">
-import { useSceneState } from '../composables/useSceneState'
+import { useSceneState } from '../../../composables/useSceneState'
 
 // 导入 TDesign 图标
 import { LightbulbIcon, LightbulbCircleIcon } from 'tdesign-icons-vue-next'
 
-/** 获取共享状态中的材质相关数据 */
+/** 获取共享状态中的材质相关数换*/
 const { materialType, materialLabel } = useSceneState()
 </script>
 
@@ -53,7 +53,7 @@ const { materialType, materialLabel } = useSceneState()
     </div>
     
     <!-- 提示文字 -->
-    <p class="hint">Standard 受光照有明暗，Basic 纯色无光影</p>
+    <p class="hint">Standard 受光照有明暗，Basic 纯色无光影/p>
   </section>
 </template>
 

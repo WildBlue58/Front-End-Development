@@ -1,21 +1,21 @@
 <!-- ============================================================
-     FovSlider.vue — 相机 FOV 滑块组件
+     FovSlider.vue —相机 FOV 滑块组件
      
-     职责：通过滑块调整相机视场角
+     职责：通过滑块调整相机视场视
      
-     单一职责：只管 FOV 数值的调整
+     单一职责：只管FOV 数值的调整
      
      TDesign 组件：
      - t-slider: 滑块组件
 ============================================================ -->
 
 <script setup lang="ts">
-import { useSceneState } from '../composables/useSceneState'
+import { useSceneState } from '../../../composables/useSceneState'
 
 // 导入 TDesign 图标
 import { ViewInArIcon } from 'tdesign-icons-vue-next'
 
-/** 获取共享状态中的 cameraFov */
+/** 获取共享状态中的cameraFov */
 const { cameraFov } = useSceneState()
 
 /**
@@ -36,7 +36,7 @@ const marks = {
     <!-- 区块标题 -->
     <h3 class="section-title">
       <ViewInArIcon class="title-icon" />
-      相机视场角 (FOV)
+      相机视场视(FOV)
     </h3>
     
     <!--
@@ -62,14 +62,14 @@ const marks = {
       show-step
     />
     
-    <!-- 当前 FOV 值显示 -->
+    <!-- 当前 FOV 值显示-->
     <div class="fov-display">
-      <span class="fov-label">当前视场角</span>
+      <span class="fov-label">当前视场视/span>
       <span class="fov-value">{{ cameraFov }}°</span>
     </div>
     
     <!-- 提示文字 -->
-    <p class="hint">20°=望远镜 75°=正常人眼 120°=鱼眼</p>
+    <p class="hint">20°=望远长75°=正常人眼 120°=鱼眼</p>
   </section>
 </template>
 

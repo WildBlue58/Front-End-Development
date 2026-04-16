@@ -1,18 +1,18 @@
 <!-- ============================================================
-     GeometrySelector.vue — 几何体选择器组件
+     GeometrySelector.vue —几何体选择器组件
      
-     职责：提供单选按钮组让用户切换4种几何体
-     → 盒子 / 球体 / 圆锥 / 甜甜圈
+     职责：提供单选按钮组让用户切换种几何体
+     →盒子 / 球体 / 圆锥 / 甜甜在
      
      单一职责：只管几何体切换，不管其他功能
      
      TDesign 组件：
      - t-radio-group: 单选按钮组容器
-     - t-radio-button: 单选按钮（按钮样式）
+     - t-radio-button: 单选按钮（按钮样式：
 ============================================================ -->
 
 <script setup lang="ts">
-import { useSceneState } from '../composables/useSceneState'
+import { useSceneState } from '../../../composables/useSceneState'
 
 // 导入 TDesign 图标
 import { ViewModuleIcon, CircleIcon } from 'tdesign-icons-vue-next'
@@ -21,14 +21,14 @@ import { ViewModuleIcon, CircleIcon } from 'tdesign-icons-vue-next'
 const { currentGeometry, geometryOptions } = useSceneState()
 
 /**
- * 几何体选项配置（带图标）
+ * 几何体选项配置（带图标：
  * 用于渲染 RadioGroup
  */
 const optionsWithIcons = [
   { label: '盒子', value: 'box', icon: ViewModuleIcon },
   { label: '球体', value: 'sphere', icon: CircleIcon },
   { label: '圆锥', value: 'cone', icon: CircleIcon },
-  { label: '甜甜圈', value: 'torus', icon: CircleIcon },
+  { label: '甜甜在, value: 'torus', icon: CircleIcon },
 ]
 </script>
 
@@ -37,7 +37,7 @@ const optionsWithIcons = [
     <!-- 区块标题 -->
     <h3 class="section-title">
       <CircleIcon class="title-icon" />
-      切换几何体
+      切换几何使
     </h3>
     
     <!--
@@ -45,8 +45,8 @@ const optionsWithIcons = [
       
       Props:
       - v-model: 双向绑定当前选中值
-      - variant: 按钮样式变体（outline/primary-filled/default-filled）
-      - size: 组件尺寸（small/medium/large）
+      - variant: 按钮样式变体（outline/primary-filled/default-filled：
+      - size: 组件尺寸（small/medium/large：
       
       Events:
       - @change: 值变化时触发
@@ -57,7 +57,7 @@ const optionsWithIcons = [
       size="small"
     >
       <!--
-        遍历渲染单选按钮
+        遍历渲染单选按针
         t-radio-button 用于按钮样式的单选项
       -->
       <t-radio-button
@@ -70,7 +70,7 @@ const optionsWithIcons = [
     </t-radio-group>
     
     <!-- 提示文字 -->
-    <p class="hint">点击切换不同的 3D 几何体形状</p>
+    <p class="hint">点击切换不同的3D 几何体形状/p>
   </section>
 </template>
 

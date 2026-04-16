@@ -6,8 +6,8 @@
 ============================================================ -->
 
 <script setup lang="ts">
-import SceneCanvas from '../components/SceneCanvas.vue'
-import ControlPanel from '../components/ControlPanel.vue'
+import SceneCanvas from '../components/practice1/SceneCanvas.vue'
+import ControlPanel from '../components/practice1/ControlPanel.vue'
 </script>
 
 <template>

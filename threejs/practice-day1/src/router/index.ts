@@ -9,28 +9,34 @@
  * /#/practice2 → Day2 模型加载与动画控制
  */
 
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes: [
-    {
-      path: '/',
-      redirect: '/practice1',
-    },
-    {
-      path: '/practice1',
-      name: 'Practice1',
-      component: () => import('../pages/Practice1Page.vue'),
-      meta: { title: 'Day 1：基础3D场景' },
-    },
-    {
-      path: '/practice2',
-      name: 'Practice2',
-      component: () => import('../pages/Practice2Page.vue'),
-      meta: { title: 'Day 2：模型加载与动画' },
-    },
-  ],
-})
+    history: createWebHashHistory(),
+    routes: [
+        {
+            path: "/",
+            redirect: "/practice1",
+        },
+        {
+            path: "/practice1",
+            name: "Practice1",
+            component: () => import("../pages/Practice1Page.vue"),
+            meta: { title: "Day 1：基础3D场景" },
+        },
+        {
+            path: "/practice2",
+            name: "Practice2",
+            component: () => import("../pages/Practice2Page.vue"),
+            meta: { title: "Day 2：模型加载与动画" },
+        },
+        {
+            path: "/practice3",
+            name: "Practice3",
+            component: () => import("../pages/Practice3Page.vue"),
+            meta: { title: "Day 3：PBR 材质" },
+        },
+    ],
+});
 
-export default router
+export default router;

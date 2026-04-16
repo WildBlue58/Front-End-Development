@@ -1,21 +1,21 @@
 <!-- ============================================================
-     ObjectModeToggle.vue — 单/多物体切换组件
+     ObjectModeToggle.vue —单多物体切换组件
      
-     职责：让用户在"1个物体"和"3个物体"之间切换
+     职责：让用户在1个物使和3个物使之间切换
      
-     单一职责：只管物体数量模式
+     单一职责：只管物体数量模开
      
      TDesign 组件：
      - t-switch: 开关组件
 ============================================================ -->
 
 <script setup lang="ts">
-import { useSceneState } from '../composables/useSceneState'
+import { useSceneState } from '../../../composables/useSceneState'
 
 // 导入 TDesign 图标
 import { LayersIcon, AppIcon } from 'tdesign-icons-vue-next'
 
-/** 获取共享状态中的 showMultiple */
+/** 获取共享状态中的showMultiple */
 const { showMultiple } = useSceneState()
 </script>
 
@@ -29,13 +29,13 @@ const { showMultiple } = useSceneState()
     
     <!--
       TDesign Switch 开关组件
-      用于切换单物体/多物体模式
+      用于切换单物使多物体模开
     -->
     <div class="switch-container">
       <div class="switch-label">
         <AppIcon v-if="!showMultiple" class="status-icon single" />
         <LayersIcon v-else class="status-icon multiple" />
-        <span>{{ showMultiple ? '3 个物体' : '单物体' }}</span>
+        <span>{{ showMultiple ? '3 个物使 : '单物使 }}</span>
       </div>
       <t-switch
         v-model="showMultiple"
@@ -44,7 +44,7 @@ const { showMultiple } = useSceneState()
     </div>
     
     <!-- 提示文字 -->
-    <p class="hint">开启后显示绿/紫/红三个不同位置的物体</p>
+    <p class="hint">开启后显示组索红三个不同位置的物体</p>
   </section>
 </template>
 

@@ -1,9 +1,9 @@
 <!-- ============================================================
-     AnimationToggle.vue — 动画开关组件
+     AnimationToggle.vue —动画开关组件
      
-     职责：控制3D物体的自转动画开关
+     职责：控制D物体的自转动画开关
      
-     单一职责：只管动画的开启/关闭
+     单一职责：只管动画的开启关闭
      
      TDesign 组件：
      - t-switch: 开关组件
@@ -11,12 +11,12 @@
 ============================================================ -->
 
 <script setup lang="ts">
-import { useSceneState } from '../composables/useSceneState'
+import { useSceneState } from '../../../composables/useSceneState'
 
 // 导入 TDesign 图标
 import { PlayCircleIcon, PauseCircleIcon } from 'tdesign-icons-vue-next'
 
-/** 获取共享状态中的 isAnimating */
+/** 获取共享状态中的isAnimating */
 const { isAnimating } = useSceneState()
 </script>
 
@@ -33,7 +33,7 @@ const { isAnimating } = useSceneState()
       
       Props:
       - v-model: 双向绑定开关状态
-      - size: 尺寸（small/medium/large）
+      - size: 尺寸（small/medium/large：
       - loading: 加载状态
       
       Events:
@@ -43,7 +43,7 @@ const { isAnimating } = useSceneState()
       <div class="switch-label">
         <PauseCircleIcon v-if="!isAnimating" class="status-icon paused" />
         <PlayCircleIcon v-else class="status-icon playing" />
-        <span>{{ isAnimating ? '旋转中' : '已暂停' }}</span>
+        <span>{{ isAnimating ? '旋转一 : '已暂做 }}</span>
       </div>
       <t-switch
         v-model="isAnimating"
@@ -52,7 +52,7 @@ const { isAnimating } = useSceneState()
     </div>
     
     <!-- 提示文字 -->
-    <p class="hint">开启后物体将沿 Y 轴持续旋转</p>
+    <p class="hint">开启后物体将沿 Y 轴持续旋转/p>
   </section>
 </template>
 

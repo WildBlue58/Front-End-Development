@@ -1,17 +1,17 @@
 <!-- ============================================================
-     StatusSummary.vue — 状态汇总组件
+     StatusSummary.vue —状态汇总组件
      
-     职责：实时显示当前所有场景配置的汇总信息
+     职责：实时显示当前所有场景配置的汇总信恢
      
-     单一职责：只负责展示状态，不修改任何数据
-     → 这是一个"只读"组件
+     单一职责：只负责展示状态，不修改任何数换
+     →这是一一只读"组件
      
      TDesign 组件：
-     - 自定义卡片样式
+     - 自定义卡片样开
 ============================================================ -->
 
 <script setup lang="ts">
-import { useSceneState } from '../composables/useSceneState'
+import { useSceneState } from '../../../composables/useSceneState'
 
 // 导入 TDesign 图标
 import { 
@@ -23,7 +23,7 @@ import {
   ViewListIcon 
 } from 'tdesign-icons-vue-next'
 
-/** 获取所有需要展示的状态 */
+/** 获取所有需要展示的状态*/
 const {
   geometryLabel,
   showMultiple,
@@ -42,17 +42,17 @@ const {
     </h3>
     
     <!--
-      状态列表
+      状态列行
       使用 flex 布局展示各项状态
     -->
     <div class="status-list">
-      <!-- 几何体类型 -->
+      <!-- 几何体类型-->
       <div class="status-item">
         <div class="item-icon">
           <CircleIcon />
         </div>
         <div class="item-content">
-          <span class="item-label">几何体</span>
+          <span class="item-label">几何使/span>
           <span class="item-value">{{ geometryLabel }}</span>
         </div>
       </div>
@@ -63,12 +63,12 @@ const {
           <LayersIcon />
         </div>
         <div class="item-content">
-          <span class="item-label">物体数</span>
+          <span class="item-label">物体数/span>
           <span class="item-value">{{ showMultiple ? 3 : 1 }}</span>
         </div>
       </div>
       
-      <!-- 动画状态 -->
+      <!-- 动画状态-->
       <div class="status-item">
         <div class="item-icon" :class="{ active: isAnimating }">
           <PlayCircleIcon />
@@ -76,7 +76,7 @@ const {
         <div class="item-content">
           <span class="item-label">动画</span>
           <span class="item-value" :class="{ active: isAnimating }">
-            {{ isAnimating ? '旋转中' : '静止' }}
+            {{ isAnimating ? '旋转一 : '静止' }}
           </span>
         </div>
       </div>
@@ -92,7 +92,7 @@ const {
         </div>
       </div>
       
-      <!-- FOV 值 -->
+      <!-- FOV 值-->
       <div class="status-item">
         <div class="item-icon">
           <ViewListIcon />

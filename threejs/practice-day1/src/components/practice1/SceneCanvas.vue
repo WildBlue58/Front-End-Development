@@ -15,7 +15,7 @@
 import { TresCanvas } from '@tresjs/core'
 import { OrbitControls } from '@tresjs/cientos'
 import ShapeMesh from './ShapeMesh.vue'
-import { useSceneState } from '../composables/useSceneState'
+import { useSceneState } from '../../composables/useSceneState'
 
 /**
  * 从 composable 获取共享状态
