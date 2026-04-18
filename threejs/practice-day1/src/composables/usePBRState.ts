@@ -60,13 +60,72 @@ const sheenColor = ref("#a78bfa");
 const iridescence = ref(0.0);
 
 // ============================================================
+//  贴图通道开关
+// ============================================================
+
+/** 是否启用 BaseColor 贴图 */
+const useBasecolorMap = ref(true);
+
+/** 是否启用 Roughness 贴图 */
+const useRoughnessMap = ref(true);
+
+/** 是否启用 Normal 法线贴图 */
+const useNormalMap = ref(true);
+
+/** 是否启用 AO 环境遮蔽贴图 */
+const useAoMap = ref(true);
+
+/** 是否启用 HDR 环境贴图 */
+const useHdr = ref(true);
+
+/** 法线贴图强度 */
+const normalScale = ref(1.0);
+
+/** AO 贴图强度 */
+const aoIntensity = ref(1.0);
+
+// ============================================================
 //  物理材质预设类型
 // ============================================================
 
-export type PhysicalPreset = "clearcoat" | "glass" | "velvet";
+export type PhysicalPreset =
+    | "clearcoat"
+    | "glass"
+    | "velvet"
+    | "gold"
+    | "chrome"
+    | "rubber"
+    | "frosted_glass"
+    | "fabric";
 
 /** 当前激活的物理材质预设 */
 const physicalPreset = ref<PhysicalPreset>("clearcoat");
+
+// ============================================================
+//  视图模式
+// ============================================================
+
+/** 对比模式（2球）或展台模式（5球）*/
+export type ViewMode = "compare" | "showcase";
+const viewMode = ref<ViewMode>("compare");
+
+// ============================================================
+//  HDR 环境选择
+// ============================================================
+
+export type HdrKey =
+    | "studio"
+    | "canary_wharf"
+    | "lilienstein"
+    | "moonless_golf";
+const hdrFile = ref<HdrKey>("studio");
+
+// ============================================================
+//  贴图通道可视化
+// ============================================================
+
+export type ChannelView = "none" | "basecolor" | "roughness" | "normal" | "ao";
+const channelView = ref<ChannelView>("none");
 
 // ============================================================
 //  Composable 函数
@@ -110,6 +169,55 @@ export function usePBRState() {
             sheenIntensity.value = 1.0;
             sheenColor.value = "#a78bfa";
             iridescence.value = 0;
+        } else if (preset === "gold") {
+            // 黄金：金色 + 全金属 + 微清漆
+            color.value = "#FFD700";
+            metalness.value = 1.0;
+            roughness.value = 0.1;
+            clearcoat.value = 0.4;
+            clearcoatRoughness.value = 0.1;
+            transmission.value = 0;
+            sheenIntensity.value = 0;
+            iridescence.value = 0;
+        } else if (preset === "chrome") {
+            // 铬合金：亮银 + 全金属 + 虹彩
+            color.value = "#e8e8e8";
+            metalness.value = 1.0;
+            roughness.value = 0.04;
+            clearcoat.value = 0;
+            transmission.value = 0;
+            sheenIntensity.value = 0;
+            iridescence.value = 0.6;
+            ior.value = 2.5;
+        } else if (preset === "rubber") {
+            // 亚光橡胶：黑色 + 非金属 + 高粗糙
+            color.value = "#1a1a1a";
+            metalness.value = 0;
+            roughness.value = 1.0;
+            clearcoat.value = 0;
+            transmission.value = 0;
+            sheenIntensity.value = 0;
+            iridescence.value = 0;
+        } else if (preset === "frosted_glass") {
+            // 磨砂玻璃：半透射 + 中粗糙
+            color.value = "#dff0f8";
+            metalness.value = 0;
+            roughness.value = 0.35;
+            clearcoat.value = 0;
+            transmission.value = 0.88;
+            ior.value = 1.45;
+            sheenIntensity.value = 0;
+            iridescence.value = 0;
+        } else if (preset === "fabric") {
+            // 布料：棕色 + 光泽层
+            color.value = "#8B4513";
+            metalness.value = 0;
+            roughness.value = 0.9;
+            clearcoat.value = 0;
+            transmission.value = 0;
+            sheenIntensity.value = 0.8;
+            sheenColor.value = "#D2691E";
+            iridescence.value = 0;
         }
     }
 
@@ -130,8 +238,22 @@ export function usePBRState() {
         sheenIntensity,
         sheenColor,
         iridescence,
+        // 贴图开关
+        useBasecolorMap,
+        useRoughnessMap,
+        useNormalMap,
+        useAoMap,
+        useHdr,
+        normalScale,
+        aoIntensity,
         // 预设
         physicalPreset,
         applyPreset,
+        // 视图模式
+        viewMode,
+        // HDR 选择
+        hdrFile,
+        // 通道可视化
+        channelView,
     };
 }

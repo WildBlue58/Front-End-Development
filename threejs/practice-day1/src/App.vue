@@ -22,6 +22,8 @@ const navItems = [
     { path: "/practice1", label: "Day 1：基础3D场景" },
     { path: "/practice2", label: "Day 2：模型加载与动画" },
     { path: "/practice3", label: "Day 3：PBR 材质" },
+    { path: "/practice4", label: "Day 4：Shader 波浪" },
+    { path: "/practice5", label: "Day 5：响应式 3D 交互" },
 ];
 
 /** 切换页面 */
@@ -134,6 +136,13 @@ body {
 .nav-tabs {
     display: flex;
     gap: 4px;
+    max-width: calc(100vw - 180px);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-tab {

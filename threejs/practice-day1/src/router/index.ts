@@ -36,6 +36,18 @@ const router = createRouter({
             component: () => import("../pages/Practice3Page.vue"),
             meta: { title: "Day 3：PBR 材质" },
         },
+        {
+            path: "/practice4",
+            name: "Practice4",
+            component: () => import("../pages/Practice4Page.vue"),
+            meta: { title: "Day 4：Shader 波浪" },
+        },
+        {
+            path: "/practice5",
+            name: "Practice5",
+            component: () => import("../pages/Practice5Page.vue"),
+            meta: { title: "Day 5：响应式 3D 交互" },
+        },
     ],
 });
 

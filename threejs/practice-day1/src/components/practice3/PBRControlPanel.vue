@@ -1,17 +1,9 @@
-<!-- ============================================================
-     PBRControlPanel.vue — Day 3 PBR 参数控制面板
-
-     职责：
-     → 基础参数（颜色/金属度/粗糙度/反射强度）
-     → Standard 专属：自发光强度
-     → Physical 专属：三种材质预设切换
-     → 深色毛玻璃风格，与 Practice2 一致
-============================================================ -->
-
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import {
     usePBRState,
     type PhysicalPreset,
+    type HdrKey,
+    type ChannelView,
 } from "../../composables/usePBRState";
 
 const {
@@ -23,154 +15,147 @@ const {
     emissiveIntensity,
     physicalPreset,
     applyPreset,
+    useBasecolorMap,
+    useRoughnessMap,
+    useNormalMap,
+    useAoMap,
+    useHdr,
+    normalScale,
+    aoIntensity,
+    viewMode,
+    hdrFile,
+    channelView,
 } = usePBRState();
 
 const presets: { value: PhysicalPreset; label: string; desc: string }[] = [
-    { value: "clearcoat", label: "🚗 汽车漆", desc: "清漆层 + 深红底色" },
-    { value: "glass", label: "🔮 玻璃", desc: "全透射 + IOR 折射" },
-    { value: "velvet", label: "🟣 天鹅绒", desc: "漫反射光泽层" },
+    { value: "clearcoat", label: "🚗 汽车漆", desc: "清漆 + 深红" },
+    { value: "glass", label: "🔮 玻璃", desc: "全透射折射" },
+    { value: "velvet", label: "🟣 天鹅绒", desc: "漫反射光泽" },
+    { value: "gold", label: "🥇 黄金", desc: "高光泽金属" },
+    { value: "chrome", label: "⚙️ 铬合金", desc: "镜面+虹彩" },
+    { value: "rubber", label: "⚫ 橡胶", desc: "全哑光黑色" },
+    { value: "frosted_glass", label: "🧊 磨砂玻璃", desc: "半透射磨砂" },
+    { value: "fabric", label: "🧵 布料", desc: "光泽绒感" },
+];
+
+const hdrOptions: { value: HdrKey; label: string; desc: string }[] = [
+    { value: "studio", label: "🎬 摄影棚", desc: "studio.hdr" },
+    { value: "canary_wharf", label: "🏙️ 码头", desc: "canary_wharf" },
+    { value: "lilienstein", label: "⛰️ 山景", desc: "lilienstein" },
+    { value: "moonless_golf", label: "🌙 夜晚", desc: "moonless_golf" },
+];
+
+const textureToggles: {
+    key: string;
+    label: string;
+    hint: string;
+    state: ReturnType<typeof usePBRState>["useBasecolorMap"];
+}[] = [
+    {
+        key: "basecolor",
+        label: "BaseColor",
+        hint: "基础颜色",
+        state: useBasecolorMap,
+    },
+    {
+        key: "roughness",
+        label: "Roughness",
+        hint: "粗糙度",
+        state: useRoughnessMap,
+    },
+    { key: "normal", label: "Normal", hint: "法线凹凸", state: useNormalMap },
+    { key: "ao", label: "AO", hint: "环境遮蔽", state: useAoMap },
+    { key: "hdr", label: "HDR", hint: "环境贴图", state: useHdr },
+];
+
+const channelOptions: { value: ChannelView; label: string }[] = [
+    { value: "none", label: "关闭" },
+    { value: "basecolor", label: "BaseColor" },
+    { value: "roughness", label: "Roughness" },
+    { value: "normal", label: "Normal" },
+    { value: "ao", label: "AO" },
 ];
 </script>
 
 <template>
-    <div class="pbr-panel">
-        <!-- 标题 -->
-        <div class="panel-header">
-            <span class="header-icon">⚗️</span>
-            <h2>PBR 材质控制台</h2>
+    <div class="pbr-panel cb-control-panel cb-control-panel--absolute">
+        <div class="cb-panel-header">
+            <div>
+                <p class="cb-panel-eyebrow">Material Lab Console</p>
+                <h2 class="cb-panel-title">Day 3 PBR 材质控制台</h2>
+            </div>
+            <span class="cb-panel-glow"></span>
         </div>
 
-        <div class="panel-body">
-            <!-- ── 两球共用：基础参数 ── -->
-            <section class="section">
-                <div class="section-title">基础参数（两球共用）</div>
+        <p class="cb-panel-copy">在统一实验台里切换视图模式、材质预设、HDR 环境与贴图通道，直接比较 PBR 参数如何改变反射、高光和表面细节。</p>
 
-                <!-- 颜色 -->
+        <div class="panel-body cb-panel-body">
+            <section class="cb-panel-section">
+                <div class="section-title cb-panel-section-title">视图模式</div>
+                <div class="mode-grid cb-panel-grid cb-panel-grid--2">
+                    <button class="mode-btn cb-panel-option-card" :class="{ active: viewMode === 'compare' }" @click="viewMode = 'compare'">
+                        <span class="mode-icon">◑</span>
+                        <span class="mode-name">对比模式</span>
+                        <span class="mode-desc">Standard vs Physical</span>
+                    </button>
+                    <button class="mode-btn cb-panel-option-card" :class="{ active: viewMode === 'showcase' }" @click="viewMode = 'showcase'">
+                        <span class="mode-icon">⬡⬡⬡⬡⬡</span>
+                        <span class="mode-name">展台模式</span>
+                        <span class="mode-desc">5 球 PBR 参数对比</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="cb-panel-section">
+                <div class="section-title cb-panel-section-title">基础参数（两球共用）</div>
+
                 <div class="row">
                     <label class="row-label">基础颜色</label>
-                    <input type="color" v-model="color" class="color-input" />
-                    <code class="color-code">{{ color }}</code>
+                    <input type="color" v-model="color" class="color-input cb-panel-color-input" />
+                    <code class="color-code cb-panel-code">{{ color }}</code>
                 </div>
 
-                <!-- 金属度 -->
                 <div class="row col">
                     <div class="row-header">
-                        <label class="row-label"
-                            >金属度
-                            <span class="hint-text">(metalness)</span></label
-                        >
+                        <label class="row-label">金属度 <span class="hint-text">(metalness)</span></label>
                         <span class="val">{{ metalness.toFixed(2) }}</span>
                     </div>
-                    <input
-                        type="range"
-                        v-model.number="metalness"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                        class="slider"
-                    />
-                    <div class="range-hints">
+                    <input type="range" v-model.number="metalness" min="0" max="1" step="0.01" class="slider cb-panel-range" />
+                    <div class="cb-panel-hint-row">
                         <span>非金属</span><span>全金属</span>
                     </div>
                 </div>
 
-                <!-- 粗糙度 -->
                 <div class="row col">
                     <div class="row-header">
-                        <label class="row-label"
-                            >粗糙度
-                            <span class="hint-text">(roughness)</span></label
-                        >
+                        <label class="row-label">粗糙度 <span class="hint-text">(roughness)</span></label>
                         <span class="val">{{ roughness.toFixed(2) }}</span>
                     </div>
-                    <input
-                        type="range"
-                        v-model.number="roughness"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                        class="slider"
-                    />
-                    <div class="range-hints">
+                    <input type="range" v-model.number="roughness" min="0" max="1" step="0.01" class="slider cb-panel-range" />
+                    <div class="cb-panel-hint-row">
                         <span>镜面</span><span>哑光</span>
                     </div>
                 </div>
 
-                <!-- 环境反射强度 -->
                 <div class="row col">
                     <div class="row-header">
-                        <label class="row-label"
-                            >环境反射
-                            <span class="hint-text"
-                                >(envMapIntensity)</span
-                            ></label
-                        >
-                        <span class="val">{{
-                            envMapIntensity.toFixed(2)
-                        }}</span>
+                        <label class="row-label">环境反射 <span class="hint-text">(envMapIntensity)</span></label>
+                        <span class="val">{{ envMapIntensity.toFixed(2) }}</span>
                     </div>
-                    <input
-                        type="range"
-                        v-model.number="envMapIntensity"
-                        min="0"
-                        max="3"
-                        step="0.05"
-                        class="slider"
-                    />
+                    <input type="range" v-model.number="envMapIntensity" min="0" max="3" step="0.05" class="slider cb-panel-range" />
                 </div>
             </section>
 
-            <!-- ── 左球 Standard：自发光 ── -->
-            <section class="section">
-                <div class="section-title">
-                    <span class="badge badge-std">左球</span>
-                    Standard · 自发光
-                </div>
-
-                <div class="row">
-                    <label class="row-label">发光颜色</label>
-                    <input
-                        type="color"
-                        v-model="emissiveColor"
-                        class="color-input"
-                    />
-                </div>
-
-                <div class="row col">
-                    <div class="row-header">
-                        <label class="row-label"
-                            >发光强度
-                            <span class="hint-text"
-                                >(emissiveIntensity)</span
-                            ></label
-                        >
-                        <span class="val">{{
-                            emissiveIntensity.toFixed(2)
-                        }}</span>
-                    </div>
-                    <input
-                        type="range"
-                        v-model.number="emissiveIntensity"
-                        min="0"
-                        max="3"
-                        step="0.05"
-                        class="slider slider-emissive"
-                    />
-                </div>
-            </section>
-
-            <!-- ── 右球 Physical：预设切换 ── -->
-            <section class="section">
-                <div class="section-title">
+            <section class="cb-panel-section">
+                <div class="section-title cb-panel-section-title">
                     <span class="badge badge-phys">右球</span>
-                    Physical · 材质预设
+                    材质预设（Physical）
                 </div>
-
-                <div class="preset-grid">
+                <div class="preset-grid cb-panel-grid cb-panel-grid--2">
                     <button
                         v-for="p in presets"
                         :key="p.value"
-                        class="preset-btn"
+                        class="preset-btn cb-panel-option-card"
                         :class="{ active: physicalPreset === p.value }"
                         @click="applyPreset(p.value)"
                     >
@@ -178,9 +163,103 @@ const presets: { value: PhysicalPreset; label: string; desc: string }[] = [
                         <span class="preset-desc">{{ p.desc }}</span>
                     </button>
                 </div>
+            </section>
 
-                <div class="preset-tip">
-                    切换预设会同时修改颜色和左右球共用的基础参数
+            <section class="cb-panel-section">
+                <div class="section-title cb-panel-section-title">HDR 环境切换</div>
+                <div class="hdr-grid cb-panel-grid cb-panel-grid--2">
+                    <button
+                        v-for="h in hdrOptions"
+                        :key="h.value"
+                        class="hdr-btn cb-panel-option-card"
+                        :class="{ active: hdrFile === h.value }"
+                        @click="hdrFile = h.value"
+                    >
+                        <span class="hdr-icon">{{ h.label.split(' ')[0] }}</span>
+                        <div>
+                            <div class="hdr-name">{{ h.label.split(' ').slice(1).join(' ') }}</div>
+                            <div class="hdr-desc">{{ h.desc }}</div>
+                        </div>
+                    </button>
+                </div>
+                <div class="preset-tip cb-panel-note">切换时按需加载，已经加载过的环境贴图会被缓存。</div>
+            </section>
+
+            <section class="cb-panel-section">
+                <div class="section-title cb-panel-section-title">贴图通道开关</div>
+
+                <div class="map-grid cb-panel-grid cb-panel-grid--2">
+                    <button
+                        v-for="t in textureToggles"
+                        :key="t.key"
+                        class="map-btn cb-panel-option-card"
+                        :class="{ active: t.state.value }"
+                        @click="t.state.value = !t.state.value"
+                    >
+                        <span class="map-dot"></span>
+                        <span class="map-name">{{ t.label }}</span>
+                        <span class="map-hint">{{ t.hint }}</span>
+                    </button>
+                </div>
+
+                <div class="row col extra-spacing" v-if="useNormalMap">
+                    <div class="row-header">
+                        <label class="row-label">法线强度 <span class="hint-text">(normalScale)</span></label>
+                        <span class="val">{{ normalScale.toFixed(2) }}</span>
+                    </div>
+                    <input type="range" v-model.number="normalScale" min="0" max="3" step="0.05" class="slider cb-panel-range" />
+                    <div class="cb-panel-hint-row">
+                        <span>平整</span><span>强凹凸</span>
+                    </div>
+                </div>
+
+                <div class="row col extra-spacing" v-if="useAoMap">
+                    <div class="row-header">
+                        <label class="row-label">AO 强度 <span class="hint-text">(aoMapIntensity)</span></label>
+                        <span class="val">{{ aoIntensity.toFixed(2) }}</span>
+                    </div>
+                    <input type="range" v-model.number="aoIntensity" min="0" max="2" step="0.05" class="slider cb-panel-range" />
+                    <div class="cb-panel-hint-row">
+                        <span>无阴影</span><span>深阴影</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cb-panel-section">
+                <div class="section-title cb-panel-section-title">通道可视化（调试）</div>
+                <div class="channel-grid">
+                    <button
+                        v-for="c in channelOptions"
+                        :key="c.value"
+                        class="channel-btn cb-panel-button"
+                        :class="{ active: channelView === c.value }"
+                        @click="channelView = c.value"
+                    >
+                        {{ c.label }}
+                    </button>
+                </div>
+                <div class="preset-tip cb-panel-note" v-if="channelView !== 'none'">
+                    当前仅显示 <strong>{{ channelView }}</strong> 通道原始数据（无光照）
+                </div>
+            </section>
+
+            <section class="cb-panel-section" v-if="viewMode === 'compare'">
+                <div class="section-title cb-panel-section-title">
+                    <span class="badge badge-std">左球</span>
+                    Standard · 自发光
+                </div>
+
+                <div class="row">
+                    <label class="row-label">发光颜色</label>
+                    <input type="color" v-model="emissiveColor" class="color-input cb-panel-color-input" />
+                </div>
+
+                <div class="row col">
+                    <div class="row-header">
+                        <label class="row-label">发光强度 <span class="hint-text">(emissiveIntensity)</span></label>
+                        <span class="val">{{ emissiveIntensity.toFixed(2) }}</span>
+                    </div>
+                    <input type="range" v-model.number="emissiveIntensity" min="0" max="3" step="0.05" class="slider slider-emissive cb-panel-range" />
                 </div>
             </section>
         </div>
@@ -189,239 +268,175 @@ const presets: { value: PhysicalPreset; label: string; desc: string }[] = [
 
 <style scoped>
 .pbr-panel {
-    position: fixed;
-    top: 20px;
-    right: 20px;
     z-index: 100;
-    width: 290px;
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-
-    background: rgba(15, 15, 30, 0.92);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(139, 92, 246, 0.2);
-    border-radius: 16px;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-    color: #e2e8f0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 13px;
-}
-
-.pbr-panel::-webkit-scrollbar {
-    width: 4px;
-}
-.pbr-panel::-webkit-scrollbar-track {
-    background: transparent;
-}
-.pbr-panel::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 246, 0.3);
-    border-radius: 2px;
-}
-
-/* 标题 */
-.panel-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 18px;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.15);
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
-    border-radius: 16px 16px 0 0;
-}
-.header-icon {
-    font-size: 18px;
-}
-.panel-header h2 {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 600;
-    color: #e2e8f0;
-}
-
-/* 内容区 */
-.panel-body {
-    padding: 14px 16px;
-}
-
-/* 分区 */
-.section {
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-.section:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
 }
 
 .section-title {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
 }
 
 .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
     font-size: 10px;
-    padding: 1px 7px;
-    border-radius: 4px;
     font-weight: 600;
-    text-transform: none;
-    letter-spacing: 0;
-}
-.badge-std {
-    background: rgba(99, 102, 241, 0.2);
-    color: #818cf8;
-}
-.badge-phys {
-    background: rgba(139, 92, 246, 0.2);
-    color: #a78bfa;
+    letter-spacing: 0.06em;
 }
 
-/* 单行控件 */
+.badge-std {
+    background: rgba(99, 102, 241, 0.16);
+    color: #c7d2fe;
+}
+
+.badge-phys {
+    background: rgba(56, 189, 248, 0.14);
+    color: #a5f3fc;
+}
+
+.mode-btn,
+.preset-btn,
+.hdr-btn,
+.map-btn {
+    text-align: left;
+}
+
+.mode-btn {
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+}
+
+.mode-icon {
+    font-size: 16px;
+}
+
+.mode-name,
+.preset-label,
+.hdr-name,
+.map-name {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mode-desc,
+.preset-desc,
+.preset-tip,
+.map-hint,
+.hdr-desc,
+.hint-text {
+    color: #64748b;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
 .row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 10px;
 }
+
+.row + .row {
+    margin-top: 12px;
+}
+
 .row.col {
     flex-direction: column;
     align-items: stretch;
-    gap: 6px;
-}
-.row:last-child {
-    margin-bottom: 0;
 }
 
 .row-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
 }
 
 .row-label {
-    font-size: 12px;
     color: #cbd5e1;
-}
-
-.hint-text {
-    font-size: 10px;
-    color: #64748b;
-    font-style: normal;
+    font-size: 12px;
 }
 
 .val {
+    color: #a5f3fc;
     font-size: 13px;
     font-weight: 600;
-    color: #a78bfa;
-    min-width: 32px;
+}
+
+.color-input {
+    width: 78px;
+    height: 42px;
+    flex-shrink: 0;
+}
+
+.color-code {
+    flex: 1;
     text-align: right;
 }
 
-/* 颜色输入 */
-.color-input {
-    width: 32px;
-    height: 22px;
-    padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    background: none;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-.color-code {
-    font-size: 11px;
-    color: #64748b;
-    flex: 1;
+.hdr-btn,
+.map-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* 滑块 */
-.slider {
-    width: 100%;
-    height: 4px;
-    -webkit-appearance: none;
-    appearance: none;
-    background: rgba(139, 92, 246, 0.2);
-    border-radius: 2px;
-    outline: none;
+.hdr-icon {
+    font-size: 16px;
 }
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 13px;
-    height: 13px;
-    background: rgb(139, 92, 246);
+
+.map-dot {
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid #0f0f1a;
+    background: #334155;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.22);
+    flex-shrink: 0;
 }
+
+.map-btn.active .map-dot {
+    background: #38bdf8;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.extra-spacing {
+    margin-top: 12px;
+}
+
+.channel-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.channel-btn.active {
+    border-color: rgba(245, 158, 11, 0.42);
+    box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.18), 0 14px 28px rgba(120, 53, 15, 0.18);
+    background: rgba(120, 53, 15, 0.34);
+    color: #fde68a;
+}
+
+.channel-btn.active:first-child {
+    border-color: rgba(148, 163, 184, 0.18);
+    box-shadow: none;
+    background: rgba(2, 6, 23, 0.38);
+    color: #94a3b8;
+}
+
 .slider-emissive {
-    background: rgba(251, 191, 36, 0.15);
+    background: rgba(245, 158, 11, 0.2);
 }
+
 .slider-emissive::-webkit-slider-thumb {
     background: #fbbf24;
 }
 
-.range-hints {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: #475569;
-}
-
-/* 预设按钮 */
-.preset-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-.preset-btn {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 9px 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 8px;
-    color: #94a3b8;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.18s ease;
-}
-.preset-btn:hover {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.3);
-    color: #e2e8f0;
-}
-.preset-btn.active {
-    background: rgba(139, 92, 246, 0.18);
-    border-color: #8b5cf6;
-    color: #e2e8f0;
-}
-.preset-label {
-    font-size: 13px;
-    font-weight: 500;
-}
-.preset-desc {
-    font-size: 10px;
-    color: #64748b;
-}
-.preset-btn.active .preset-desc {
-    color: #94a3b8;
-}
-
-.preset-tip {
-    margin-top: 8px;
-    font-size: 10px;
-    color: #475569;
-    line-height: 1.5;
+.slider-emissive::-moz-range-thumb {
+    background: #fbbf24;
 }
 </style>

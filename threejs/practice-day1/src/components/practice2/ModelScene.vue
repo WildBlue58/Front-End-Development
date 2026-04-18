@@ -211,7 +211,7 @@ function loadDroppedModel(fileName: string, blobUrl: string) {
             <div v-if="isDragOver" class="drag-overlay">
                 <div class="drag-hint">
                     <div class="drag-icon">📦</div>
-                    <p>松开以替换模型/p>
+                    <p>松开以替换模型</p>
                     <p class="drag-sub">支持 .glb 格式</p>
                 </div>
             </div>

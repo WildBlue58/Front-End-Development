@@ -1,113 +1,66 @@
-<!-- ============================================================
-     GeometrySelector.vue —几何体选择器组件
-     
-     职责：提供单选按钮组让用户切换种几何体
-     →盒子 / 球体 / 圆锥 / 甜甜在
-     
-     单一职责：只管几何体切换，不管其他功能
-     
-     TDesign 组件：
-     - t-radio-group: 单选按钮组容器
-     - t-radio-button: 单选按钮（按钮样式：
-============================================================ -->
-
 <script setup lang="ts">
-import { useSceneState } from '../../../composables/useSceneState'
+import { useSceneState } from "../../../composables/useSceneState";
 
-// 导入 TDesign 图标
-import { ViewModuleIcon, CircleIcon } from 'tdesign-icons-vue-next'
+const { currentGeometry } = useSceneState();
 
-/** 获取共享状态中的几何体相关数据 */
-const { currentGeometry, geometryOptions } = useSceneState()
-
-/**
- * 几何体选项配置（带图标：
- * 用于渲染 RadioGroup
- */
 const optionsWithIcons = [
-  { label: '盒子', value: 'box', icon: ViewModuleIcon },
-  { label: '球体', value: 'sphere', icon: CircleIcon },
-  { label: '圆锥', value: 'cone', icon: CircleIcon },
-  { label: '甜甜在, value: 'torus', icon: CircleIcon },
-]
+    { label: "盒子", value: "box" },
+    { label: "球体", value: "sphere" },
+    { label: "圆锥", value: "cone" },
+    { label: "甜甜圈", value: "torus" },
+];
 </script>
 
 <template>
-  <section class="panel-section">
-    <!-- 区块标题 -->
-    <h3 class="section-title">
-      <CircleIcon class="title-icon" />
-      切换几何使
-    </h3>
-    
-    <!--
-      TDesign RadioGroup 单选按钮组
-      
-      Props:
-      - v-model: 双向绑定当前选中值
-      - variant: 按钮样式变体（outline/primary-filled/default-filled：
-      - size: 组件尺寸（small/medium/large：
-      
-      Events:
-      - @change: 值变化时触发
-    -->
-    <t-radio-group
-      v-model="currentGeometry"
-      variant="default-filled"
-      size="small"
-    >
-      <!--
-        遍历渲染单选按针
-        t-radio-button 用于按钮样式的单选项
-      -->
-      <t-radio-button
-        v-for="option in optionsWithIcons"
-        :key="option.value"
-        :value="option.value"
-      >
-        {{ option.label }}
-      </t-radio-button>
-    </t-radio-group>
-    
-    <!-- 提示文字 -->
-    <p class="hint">点击切换不同的3D 几何体形状/p>
-  </section>
+    <section class="cb-panel-section">
+        <h3 class="cb-panel-section-title">几何体 Geometry</h3>
+
+        <div class="selector-shell">
+            <t-radio-group v-model="currentGeometry" variant="default-filled" size="small" class="selector-group">
+                <t-radio-button v-for="option in optionsWithIcons" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                </t-radio-button>
+            </t-radio-group>
+        </div>
+
+        <p class="cb-panel-note">点击切换盒子、球体、圆锥和甜甜圈，观察同一光照下不同几何结构的轮廓差异。</p>
+    </section>
 </template>
 
 <style scoped>
-.panel-section {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+.selector-shell {
+    padding: 4px;
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(2, 6, 23, 0.38);
 }
 
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: #a5b4fc;
+:deep(.selector-group) {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
 }
 
-.title-icon {
-  font-size: 16px;
+:deep(.selector-group .t-radio-button) {
+    margin: 0;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #94a3b8;
+    min-height: 38px;
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
 }
 
-.hint {
-  margin: 8px 0 0 0;
-  font-size: 11px;
-  color: #64748b;
-  line-height: 1.4;
+:deep(.selector-group .t-radio-button:hover) {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.7);
+    color: #f8fafc;
 }
 
-/* TDesign 按钮组深色主题适配 */
-:deep(.t-radio-group) {
-  width: 100%;
-}
-
-:deep(.t-radio-button) {
-  flex: 1;
+:deep(.selector-group .t-radio-button.t-is-checked) {
+    background: rgba(15, 23, 42, 0.9);
+    color: #f8fafc;
+    box-shadow: 0 0 0 1px rgba(103, 232, 249, 0.18), 0 14px 28px rgba(8, 47, 73, 0.22);
 }
 </style>

@@ -1,107 +1,71 @@
-<!-- ============================================================
-     ObjectModeToggle.vue —单多物体切换组件
-     
-     职责：让用户在1个物使和3个物使之间切换
-     
-     单一职责：只管物体数量模开
-     
-     TDesign 组件：
-     - t-switch: 开关组件
-============================================================ -->
-
 <script setup lang="ts">
-import { useSceneState } from '../../../composables/useSceneState'
+import { useSceneState } from "../../../composables/useSceneState";
+import { LayersIcon, AppIcon } from "tdesign-icons-vue-next";
 
-// 导入 TDesign 图标
-import { LayersIcon, AppIcon } from 'tdesign-icons-vue-next'
-
-/** 获取共享状态中的showMultiple */
-const { showMultiple } = useSceneState()
+const { showMultiple } = useSceneState();
 </script>
 
 <template>
-  <section class="panel-section">
-    <!-- 区块标题 -->
-    <h3 class="section-title">
-      <LayersIcon class="title-icon" />
-      多个物体
-    </h3>
-    
-    <!--
-      TDesign Switch 开关组件
-      用于切换单物使多物体模开
-    -->
-    <div class="switch-container">
-      <div class="switch-label">
-        <AppIcon v-if="!showMultiple" class="status-icon single" />
-        <LayersIcon v-else class="status-icon multiple" />
-        <span>{{ showMultiple ? '3 个物使 : '单物使 }}</span>
-      </div>
-      <t-switch
-        v-model="showMultiple"
-        size="large"
-      />
-    </div>
-    
-    <!-- 提示文字 -->
-    <p class="hint">开启后显示组索红三个不同位置的物体</p>
-  </section>
+    <section class="cb-panel-section">
+        <h3 class="cb-panel-section-title">物体模式</h3>
+
+        <div class="toggle-shell cb-toggle-row">
+            <div class="switch-label">
+                <AppIcon v-if="!showMultiple" class="status-icon single" />
+                <LayersIcon v-else class="status-icon multiple" />
+                <div>
+                    <strong>{{ showMultiple ? "3 个物体" : "单物体" }}</strong>
+                    <p>{{ showMultiple ? "并排观察空间层次" : "聚焦单个主体表现" }}</p>
+                </div>
+            </div>
+            <t-switch v-model="showMultiple" size="large" />
+        </div>
+
+        <p class="cb-panel-note">开启后会显示绿、紫、红三个不同位置的物体，便于观察构图和空间关系。</p>
+    </section>
 </template>
 
 <style scoped>
-.panel-section {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: #a5b4fc;
-}
-
-.title-icon {
-  font-size: 16px;
-}
-
-.switch-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
+.toggle-shell {
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(2, 6, 23, 0.38);
 }
 
 .switch-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #e2e8f0;
-  font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #e2e8f0;
+}
+
+.switch-label strong {
+    display: block;
+    color: #f8fafc;
+    font-size: 13px;
+}
+
+.switch-label p {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 12px;
 }
 
 .status-icon {
-  font-size: 18px;
+    font-size: 18px;
+    flex-shrink: 0;
 }
 
 .status-icon.single {
-  color: #64748b;
+    color: #64748b;
 }
 
 .status-icon.multiple {
-  color: #6366f1;
+    color: #38bdf8;
 }
 
-.hint {
-  margin: 8px 0 0 0;
-  font-size: 11px;
-  color: #64748b;
-  line-height: 1.4;
+:deep(.t-switch) {
+    --td-brand-color: #38bdf8;
 }
 </style>
