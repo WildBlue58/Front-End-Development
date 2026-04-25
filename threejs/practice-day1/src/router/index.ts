@@ -48,6 +48,24 @@ const router = createRouter({
             component: () => import("../pages/Practice5Page.vue"),
             meta: { title: "Day 5：响应式 3D 交互" },
         },
+        {
+            path: "/practice6",
+            name: "Practice6",
+            component: () => import("../pages/Practice6Page.vue"),
+            meta: { title: "Day 6：性能优化与后处理" },
+        },
+        {
+            path: "/practice7",
+            name: "Practice7",
+            component: () => import("../pages/Practice7Page.vue"),
+            meta: { title: "Day 7：资产管线实验台" },
+        },
+        {
+            path: "/practice8",
+            name: "Practice8",
+            component: () => import("../pages/Practice8Page.vue"),
+            meta: { title: "Day 8：综合产品展示页" },
+        },
     ],
 });
 

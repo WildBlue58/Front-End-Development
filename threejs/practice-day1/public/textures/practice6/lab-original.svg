@@ -1,0 +1,42 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#020617" />
+      <stop offset="52%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#164e63" />
+    </linearGradient>
+    <radialGradient id="haloA" cx="28%" cy="30%" r="48%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="haloB" cx="72%" cy="68%" r="44%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.66" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#38bdf8" stroke-opacity="0.14" stroke-width="1" />
+      <circle cx="32" cy="32" r="1.5" fill="#7dd3fc" fill-opacity="0.34" />
+    </pattern>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)" />
+  <rect width="1024" height="1024" fill="url(#haloA)" />
+  <rect width="1024" height="1024" fill="url(#haloB)" />
+  <rect width="1024" height="1024" fill="url(#grid)" />
+  <g fill="none" stroke="#a5f3fc" stroke-opacity="0.65">
+    <path d="M120 200C300 80 520 120 694 234C824 320 902 494 890 672" stroke-width="10" />
+    <path d="M182 780C338 684 512 654 696 708C802 740 874 802 922 872" stroke-width="8" />
+    <path d="M240 320L512 128L784 320L784 704L512 896L240 704Z" stroke-width="6" stroke-opacity="0.36" />
+  </g>
+  <g>
+    <circle cx="320" cy="320" r="112" fill="#67e8f9" fill-opacity="0.18" stroke="#7dd3fc" stroke-opacity="0.8" stroke-width="5" />
+    <circle cx="704" cy="632" r="96" fill="#f59e0b" fill-opacity="0.16" stroke="#fde68a" stroke-opacity="0.68" stroke-width="4" />
+    <rect x="428" y="420" width="168" height="168" rx="28" fill="#0f172a" fill-opacity="0.55" stroke="#38bdf8" stroke-opacity="0.62" stroke-width="4" />
+    <path d="M456 540L510 470L546 520L592 460" stroke="#f8fafc" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M444 666H580" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" />
+    <path d="M444 708H548" stroke="#7dd3fc" stroke-opacity="0.76" stroke-width="6" stroke-linecap="round" />
+  </g>
+  <g fill="#f8fafc" fill-opacity="0.72" font-family="PingFang SC, Segoe UI, sans-serif">
+    <text x="118" y="930" font-size="54" font-weight="700">Original Texture Profile</text>
+    <text x="122" y="978" font-size="28" font-weight="400" fill-opacity="0.56">High resolution grid / layered gradients / more decorative strokes</text>
+  </g>
+</svg>

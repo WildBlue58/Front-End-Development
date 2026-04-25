@@ -24,6 +24,9 @@ const navItems = [
     { path: "/practice3", label: "Day 3：PBR 材质" },
     { path: "/practice4", label: "Day 4：Shader 波浪" },
     { path: "/practice5", label: "Day 5：响应式 3D 交互" },
+    { path: "/practice6", label: "Day 6：性能优化与后处理" },
+    { path: "/practice7", label: "Day 7：资产管线实验台" },
+    { path: "/practice8", label: "Day 8：综合产品展示页" },
 ];
 
 /** 切换页面 */
